@@ -17,9 +17,9 @@ namespace Artemis.Systems {
         }
 
 
-        protected override bool checkProcessing() {
+        protected override bool CheckProcessing() {
 
-            if ((acc += world.getDelta()) >= interval) {
+            if ((acc += World.GetDelta()) >= interval) {
                 acc -= interval;
                 return true;
             }

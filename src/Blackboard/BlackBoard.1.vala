@@ -8,7 +8,7 @@ namespace Artemis.Blackboard
         private Object entryLock;
 
         /** the intelligence. */
-        private Dictionary<string, System.Variant> intelligence;
+        private Dictionary<string, Object> intelligence;
     
         /** the triggers. */
         private Dictionary<string, ArrayList<Trigger>> triggers;
@@ -18,7 +18,7 @@ namespace Artemis.Blackboard
          */
         public BlackBoard() 
         {
-            intelligence = new Dictionary<string, System.Variant>();
+            intelligence = new Dictionary<string, Object>();
             triggers = new Dictionary<string, ArrayList<Trigger>>();
             entryLock = new Object();
         }
@@ -79,7 +79,7 @@ namespace Artemis.Blackboard
          */
         public T GetEntry<T>(string name) 
         {
-            return intelligence[name].Value();
+            return (T)intelligence[name];
         }
     
         /**
@@ -133,7 +133,7 @@ namespace Artemis.Blackboard
                     ? TriggerStateType.ValueChanged 
                     : TriggerStateType.ValueAdded;
 
-                intelligence[name] = new System.Variant<T>(intel);
+                intelligence[name] = (Object)intel;
         
                 if (triggers.ContainsKey(name)) {
                     foreach (Trigger item in (ArrayList<Trigger>)triggers[name]) {

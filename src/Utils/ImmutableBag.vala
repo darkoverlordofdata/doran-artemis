@@ -32,14 +32,14 @@ namespace Artemis.Utils {
          *
          * @return the number of elements in this bag
          */
-        public abstract int size();
+        public abstract int Size();
 
         /**
          * Returns true if this bag contains no elements.
          *
          * @return true if this bag contains no elements
          */
-        public abstract bool isEmpty();
+        public abstract bool IsEmpty();
 
         /**
          * Check if bag contains this element.
@@ -48,7 +48,7 @@ namespace Artemis.Utils {
          *
          * @return true if the bag contains this element
          */
-        public abstract bool contains(E e);
+        public abstract bool Contains(E e);
 
     }
 }

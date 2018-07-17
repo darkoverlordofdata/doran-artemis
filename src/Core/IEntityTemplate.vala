@@ -1,7 +1,7 @@
 namespace Artemis {
   
     public interface IEntityTemplate : Object {
-        public abstract Entity buildEntity(Entity entity, World world, ...);
+        public abstract Entity BuildEntity(Entity entity, World world, ...);
     }
   
 }

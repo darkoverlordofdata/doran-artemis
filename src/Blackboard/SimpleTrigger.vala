@@ -1,6 +1,8 @@
-namespace Artemis.Blackboard {
+namespace Artemis.Blackboard 
+{
   
-    public class SimpleTrigger : Trigger {
+    public class SimpleTrigger : Trigger 
+    {
 
         public delegate bool Condition(BlackBoard b, TriggerStateType t);
         public delegate void OnFire(TriggerStateType t);
@@ -18,7 +20,8 @@ namespace Artemis.Blackboard {
          * @param condition The condition.
          * @param onFire  The event.
          */
-        public SimpleTrigger(string name, Condition condition, OnFire onFire) {
+        public SimpleTrigger(string name, Condition condition, OnFire onFire) 
+        {
             base( { name } );
             this.condition = condition;
             this.onFire = onFire;
@@ -28,7 +31,8 @@ namespace Artemis.Blackboard {
          * Called if is fired.
          * @param triggerStateType  State of the trigger.
          */
-        protected void calledOnFire(TriggerStateType triggerStateType) {
+        protected void CalledOnFire(TriggerStateType triggerStateType) 
+        {
             if (onFire != null) {
                 onFire(triggerStateType);
             }
@@ -38,8 +42,9 @@ namespace Artemis.Blackboard {
          * Checks the condition to fire.
          * @returns {boolean} if XXXX, false otherwise
          */
-        protected bool checkConditionToFire() {
-            return condition(blackboard, triggerStateType);
+        protected bool checkConditionToFire() 
+        {
+            return condition(BlackBoard, TriggerStateType);
         }
     }
 }

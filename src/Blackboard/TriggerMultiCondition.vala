@@ -1,6 +1,8 @@
-namespace Artemis.Blackboard {
+namespace Artemis.Blackboard 
+{
   
-    public class TriggerMultiCondition : Trigger {
+    public class TriggerMultiCondition : Trigger 
+    {
   
         public delegate bool Condition(BlackBoard b, TriggerStateType t);
         public delegate void OnFire(TriggerStateType t);
@@ -19,7 +21,8 @@ namespace Artemis.Blackboard {
          * @param onFire  The event.
          * @param names  The names.
          */
-        public TriggerMultiCondition(Condition condition, OnFire onFire, string[] names) {
+        public TriggerMultiCondition(Condition condition, OnFire onFire, string[] names) 
+        {
             base(names);
             this.condition = condition;
             this.onFire = onFire;
@@ -28,15 +31,17 @@ namespace Artemis.Blackboard {
         /**
          * Removes the this trigger.
          */
-        public void removeThisTrigger() {
-            this.blackboard.removeTrigger(this);
+        public void RemoveThisTrigger() 
+        {
+            this.BlackBoard.RemoveTrigger(this);
         }
     
         /**
          * Called if is fired.
          * @param triggerStateType  State of the trigger.
          */
-        protected void calledOnFire(TriggerStateType triggerStateType) {
+        protected override void CalledOnFire(TriggerStateType triggerStateType) 
+        {
             if (onFire != null) {
                 onFire(triggerStateType);
             }
@@ -46,8 +51,9 @@ namespace Artemis.Blackboard {
          * Checks the condition to fire.
          * @returns {boolean} if XXXX, false otherwise
          */
-        protected bool checkConditionToFire() {
-            return condition(blackboard, triggerStateType);
+        protected override bool CheckConditionToFire() 
+        {
+            return condition(BlackBoard, TriggerStateType);
         }
     }
 }

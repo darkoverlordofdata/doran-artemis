@@ -1,29 +1,28 @@
-using Gee;
+using System.Collections.Generic;
 using Artemis.Utils;
 
-namespace Artemis {
+namespace Artemis 
+{
   
-    //  interface IdentityGee.Gee.HashMap {
-    //    [key: string]: ComponentType;
-    //  }
-  
-    public class ComponentTypeFactory : Object {
+    public class ComponentTypeFactory : Object 
+    {
         /**
          * Contains all generated component types, newly generated component types
          * will be stored here.
          */
-        private HashMap<string,ComponentType> componentTypes;
+        private Dictionary<string,ComponentType> componentTypes;
     
         /** Amount of generated component types. */
         private int componentTypeCount = 0;
     
         /** Index of this component type in componentTypes. */
-        public Bag<ComponentType> types;
+        public Bag<ComponentType> Types;
     
-        public ComponentTypeFactory() {
-            componentTypes = new HashMap<string,ComponentType>();
-            types = new Bag<ComponentType>();
-            Aspect.typeFactory = this;
+        public ComponentTypeFactory() 
+        {
+            componentTypes = new Dictionary<string,ComponentType>();
+            Types = new Bag<ComponentType>();
+            Aspect.TypeFactory = this;
         }
     
         /**
@@ -38,7 +37,8 @@ namespace Artemis {
         *
         * @return the component's {@link ComponentType}
         */
-        public ComponentType getTypeFor(Type c) {
+        public ComponentType GetTypeFor(Type c) 
+        {
             //  if ('number' == typeof c) {
             //  return this.types[parseInt(c)];
             //  }
@@ -49,7 +49,7 @@ namespace Artemis {
                 var index = componentTypeCount++;
                 type = new ComponentType(c, index);
                 componentTypes[c.name()] = type;
-                types.set(index, type);
+                Types.set(index, type);
             }
     
             return type;
@@ -63,14 +63,15 @@ namespace Artemis {
         *
         * @return the component type's index
         */
-        public int getIndexFor(Type c) {
-            return getTypeFor(c).getIndex();
+        public int GetIndexFor(Type c) 
+        {
+            return GetTypeFor(c).GetIndex();
         }
     
-        public Taxonomy getTaxonomy(int index) {
-            return types[index].getTaxonomy();
+        public Taxonomy GetTaxonomy(int index) 
+        {
+            return Types[index].GetTaxonomy();
         }
     
     }
 }
-  

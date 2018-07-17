@@ -13,18 +13,18 @@ namespace Artemis.Systems {
     public abstract class VoidEntitySystem : EntitySystem {
 
         public VoidEntitySystem() {
-            base(Aspect.getEmpty());
+            base(Aspect.GetEmpty());
         }
 
 
-        protected override void processEntities(ImmutableBag<Entity> entities) {
-            this.processSystem();
+        protected override void ProcessEntities(ImmutableBag<Entity> entities) {
+            this.ProcessSystem();
         }
 
-        protected abstract void processSystem();
+        protected abstract void ProcessSystem();
 
 
-        protected override bool checkProcessing() {
+        protected override bool CheckProcessing() {
             return true;
         }
 

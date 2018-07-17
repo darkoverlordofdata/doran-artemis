@@ -25,38 +25,38 @@ namespace Artemis {
 		}
 		
 		
-		public override void initialize() {}
+		public override void Initialize() {}
 	
-		public Entity createEntityInstance(string name = "") {
-			var e = new Entity(world, identifierPool.checkOut(), name);
+		public Entity CreateEntityInstance(string name = "") {
+			var e = new Entity(world, identifierPool.CheckOut(), name);
 			_created++;
 			return e;
 		}
 		
 		
-		public void added(Entity e) {
+		public override void Added(Entity e) {
 			_active++;
 			_added++;
-			entities.set(e.getId(), e);
+			entities.set(e.GetId(), e);
 		}
 		
 		
-		public void enabled(Entity e) {
-			_disabled.clear(e.getId());
+		public override void Enabled(Entity e) {
+			_disabled.Clear(e.GetId());
 		}
 		
 		
-		public void disabled(Entity e) {
-			_disabled.set(e.getId());
+		public override void Disabled(Entity e) {
+			_disabled[e.GetId()] = true;
 		}
 		
 		
-		public void deleted(Entity e) {
-			entities.set(e.getId(), null);
+		public override void Deleted(Entity e) {
+			entities.set(e.GetId(), null);
 			
-			_disabled.clear(e.getId());
+			_disabled.Clear(e.GetId());
 			
-			identifierPool.checkIn(e.getId());
+			identifierPool.CheckIn(e.GetId());
 			
 			_active--;
 			_deleted++;
@@ -70,7 +70,7 @@ namespace Artemis {
 		* @param entityId
 		* @return true if active, false if not.
 		*/
-		public bool isActive(int entityId) {
+		public bool IsActive(int entityId) {
 			return entities[entityId] != null;
 		}
 		
@@ -80,7 +80,7 @@ namespace Artemis {
 		* @param entityId
 		* @return true if the entity is enabled, false if it is disabled.
 		*/
-		public bool isEnabled(int entityId) {
+		public bool IsEnabled(int entityId) {
 			return !_disabled.get(entityId);
 		}
 		
@@ -90,7 +90,7 @@ namespace Artemis {
 		* @param entityId
 		* @return the entity
 		*/
-		public Entity getEntity(int entityId) {
+		public Entity GetEntity(int entityId) {
 			return entities[entityId];
 		}
 		
@@ -98,7 +98,7 @@ namespace Artemis {
 		* Get how many entities are active in this world.
 		* @return how many entities are currently active.
 		*/
-		public int getActiveEntityCount() {
+		public int GetActiveEntityCount() {
 			return _active;
 		}
 		
@@ -108,7 +108,7 @@ namespace Artemis {
 		* created count is always equal or larger than added count.
 		* @return how many entities have been created since start.
 		*/
-		public int getTotalCreated() {
+		public int GetTotalCreated() {
 			return _created;
 		}
 		
@@ -116,7 +116,7 @@ namespace Artemis {
 		* Get how many entities have been added to the world since start.
 		* @return how many entities have been added.
 		*/
-		public int getTotalAdded() {
+		public int GetTotalAdded() {
 			return _added;
 		}
 		
@@ -124,18 +124,14 @@ namespace Artemis {
 		* Get how many entities have been deleted from the world since start.
 		* @return how many entities have been deleted since start.
 		*/
-		public int getTotalDeleted() {
+		public int GetTotalDeleted() {
 			return _deleted;
 		}
-		
-		
-		
-	
 	}
 	/*
 	* Used only internally to generate distinct ids for entities and reuse them.
 	*/
-	class IdentifierPool {
+	internal class IdentifierPool {
 		private Bag<int> ids;
 		private int nextAvailableId=0;
 
@@ -143,15 +139,15 @@ namespace Artemis {
 			ids = new Bag<int>();
 		}
 		
-		public int checkOut() {
-			if (ids.size() > 0) {
-				return ids.removeLast();
+		public int CheckOut() {
+			if (ids.Size() > 0) {
+				return ids.RemoveLast();
 			}
 			return nextAvailableId++;
 		}
 		
-		public void checkIn(int id) {
-			ids.add(id);
+		public void CheckIn(int id) {
+			ids.Add(id);
 		}
 	}
 }

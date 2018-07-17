@@ -6,33 +6,33 @@
  * @author Arni Arent
  *
  */
-using Gee;
+using System.Collections.Generic;
 using Artemis.Utils;
 
 namespace Artemis.Managers {
 
     public class PlayerManager : Manager {
 
-        private HashMap<Entity, string> playerByEntity;
-        private HashMap<string, Bag<Entity>> entitiesByPlayer;
+        private Dictionary<Entity, string> playerByEntity;
+        private Dictionary<string, Bag<Entity>> entitiesByPlayer;
 
         public PlayerManager() {
             base();
-            playerByEntity = new HashMap<Entity, string>();
-            entitiesByPlayer = new HashMap<string, Bag<Entity>>();
+            playerByEntity = new Dictionary<Entity, string>();
+            entitiesByPlayer = new Dictionary<string, Bag<Entity>>();
         }
 
-        public void setPlayer(Entity e, string player) {
+        public void SetPlayer(Entity e, string player) {
             playerByEntity[e] = player;
             var entities = entitiesByPlayer.get(player);
             if (entities == null) {
                 entities = new Bag<Entity>();
                 entitiesByPlayer[player] = entities;
             }
-            entities.add(e);
+            entities.Add(e);
         }
 
-        public ImmutableBag<Entity> getEntitiesOfPlayer(string player)  {
+        public ImmutableBag<Entity> GetEntitiesOfPlayer(string player)  {
             var entities = entitiesByPlayer.get(player);
             if (entities == null) {
                 entities = new Bag<Entity>();
@@ -40,26 +40,26 @@ namespace Artemis.Managers {
             return entities;
         }
 
-        public void removeFromPlayer(Entity e) {
+        public void RemoveFromPlayer(Entity e) {
             var player = playerByEntity.get(e);
             if (player != null) {
                 var entities = entitiesByPlayer.get(player);
                 if(entities != null) {
-                    entities.remove(e);
+                    entities.Remove(e);
                 }
             }
         }
 
-        public string getPlayer(Entity e) {
+        public string GetPlayer(Entity e) {
             return playerByEntity.get(e);
         }
 
 
-        public override void initialize() {}
+        public override void Initialize() {}
 
 
-        public override void deleted(Entity e) {
-            removeFromPlayer(e);
+        public override void Deleted(Entity e) {
+            RemoveFromPlayer(e);
         }
 
     }

@@ -8,17 +8,19 @@
 */
 using Artemis.Utils;
 
-namespace Artemis {
-  
-      public class ComponentMapper<A> : Object {
+namespace Artemis 
+{
+      public class ComponentMapper<A> : Object 
+      {
           private ComponentType type;
           private Type classType;
           private Bag<Component> components;
       
-          public ComponentMapper(Type type, World world) {
-              //this.type_ = ComponentType.getTypeFor(type);
-              this.type = world.getComponentManager().typeFactory.getTypeFor(type);
-              components = world.getComponentManager().getComponentsByType(this.type);
+          public ComponentMapper(Type type, World world) 
+          {
+              //this.type_ = ComponentType.GetTypeFor(type);
+              this.type = world.GetComponentManager().TypeFactory.GetTypeFor(type);
+              components = world.GetComponentManager().GetComponentsByType(this.type);
               classType = type;
           }
       
@@ -30,8 +32,9 @@ namespace Artemis {
           * @param e the entity that should possess the component
           * @return the instance of the component
           */
-          public A get(Entity e) {
-              return components[e.getId()];
+          public A get(Entity e) 
+          {
+              return components[e.GetId()];
           }
       
           /**
@@ -41,9 +44,10 @@ namespace Artemis {
           * @param e the entity that should possess the component
           * @return the instance of the component
           */
-          public A getSafe(Entity e) {
-              if(components.isIndexWithinBounds(e.getId())) {
-                  return components[e.getId()];
+          public A GetSafe(Entity e) 
+          {
+              if(components.IsIndexWithinBounds(e.GetId())) {
+                  return components[e.GetId()];
               }
               return null;
           }
@@ -53,8 +57,9 @@ namespace Artemis {
           * @param e the entity to check
           * @return true if the entity has this component type, false if it doesn't.
           */
-          public bool has(Entity e) {
-              return getSafe(e) != null;		
+          public bool Has(Entity e) 
+          {
+              return GetSafe(e) != null;		
           }
       
           /**
@@ -64,12 +69,9 @@ namespace Artemis {
           * @param world the world that this component mapper should use.
           * @return a new mapper.
           */
-          public static ComponentMapper<T> getFor<T>(Type type, World world) {
+          public static ComponentMapper<T> GetFor<T>(Type type, World world) 
+          {
               return new ComponentMapper<T>(type, world);
           }
-          // public static <T extends Component> ComponentMapper<T> getFor(Class<T> type, World world) {
-          // 	return new ComponentMapper<T>(type, world);
-          // }
-      
       }
   }

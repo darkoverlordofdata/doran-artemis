@@ -36,7 +36,7 @@ namespace Artemis.Utils {
          *            the index of element to be removed
          * @return {Object} element that was removed from the Bag
          */
-        public E removeAt(int index) {
+        public E RemoveAt(int index) {
     
             var e = data[index]; // make copy of element to remove so it can be returned
             data[index] = data[--length]; // overwrite item to remove with last element
@@ -54,7 +54,7 @@ namespace Artemis.Utils {
          *            element to be removed from this list, if present
          * @return {boolean} true if this list contained the specified element
          */
-        public bool remove(E e) {
+        public bool Remove(E e) {
             E e2;
             var size = length;
     
@@ -85,7 +85,7 @@ namespace Artemis.Utils {
          *
          * @return {Object} the last object in the bag, null if empty.
          */
-        public E removeLast() {
+        public E RemoveLast() {
             if (length > 0) {
                 var e = data[--length];
                 data[length] = null;
@@ -100,7 +100,7 @@ namespace Artemis.Utils {
          * @param e
          * @return {boolean}
          */
-        public bool contains(E e) {
+        public bool Contains(E e) {
 
             for (var i=0; length > i; i++) {
                 if (e == data[i]) {
@@ -118,7 +118,7 @@ namespace Artemis.Utils {
          *            Bag containing elements to be removed from this Bag
          * @return {boolean} true if this Bag changed as a result of the call
          */
-        public bool removeAll(ImmutableBag<E> bag) {
+        public bool RemoveAll(ImmutableBag<E> bag) {
             var modified = false;
             int i;
             int j;
@@ -126,14 +126,14 @@ namespace Artemis.Utils {
             E e1;
             E e2;
     
-            for (i = 0, l=bag.size(); i < l; i++) {
+            for (i = 0, l=bag.Size(); i < l; i++) {
                 e1 = bag[i];
         
                 for (j = 0; j < length; j++) {
                     e2 = data[j];
         
                     if (e1 == e2) {
-                        removeAt(j);
+                        RemoveAt(j);
                         j--;
                         modified = true;
                         break;
@@ -169,9 +169,9 @@ namespace Artemis.Utils {
          * @return {Object} the element at the specified position in bag
          *
          */
-        public E safeGet(int index) {
+        public E SafeGet(int index) {
             if (index >= data.length) {
-                grow((int)Math.fmaxf((2 * data.length), (3 * index) / 2));
+                Grow((int)Math.fmaxf((2 * data.length), (3 * index) / 2));
             }
             return data[index];
         }
@@ -181,7 +181,7 @@ namespace Artemis.Utils {
          *
          * @return {number} the number of elements in this bag
          */
-        public int size() {
+        public int Size() {
             return length;
         }
     
@@ -190,7 +190,7 @@ namespace Artemis.Utils {
          *
          * @return {number} the number of elements the bag can hold without growing.
          */
-        public int getCapacity() {
+        public int GetCapacity() {
             return data.length;
         }
     
@@ -200,8 +200,8 @@ namespace Artemis.Utils {
          * @param index
          * @return {boolean}
          */
-        public bool isIndexWithinBounds(int index) {
-            return index < getCapacity();
+        public bool IsIndexWithinBounds(int index) {
+            return index < GetCapacity();
         }
     
         /**
@@ -209,7 +209,7 @@ namespace Artemis.Utils {
          *
          * @return {boolean} true if this list contains no elements
          */
-        public bool isEmpty() {
+        public bool IsEmpty() {
             return length == 0;
         }
     
@@ -220,10 +220,10 @@ namespace Artemis.Utils {
          * @param e
          *            element to be added to this list
          */
-        public void add(E e) {
+        public void Add(E e) {
             // is length greater than capacity increase capacity
             if (length == data.length) 
-                grow(data.length * 2);
+                Grow(data.length * 2);
     
             data[length++] = e;
         }
@@ -238,7 +238,7 @@ namespace Artemis.Utils {
          * @param e
          *			the element
          */
-        public void unsafeSet(int index, E e) {
+        public void UnsafeSet(int index, E e) {
             data[index] = e;
         }
 
@@ -250,13 +250,13 @@ namespace Artemis.Utils {
          */
         public void set(int index, E e) {
             if (index >= data.length) {
-                grow(index * 2);
+                Grow(index * 2);
             }
             length = index + 1;
             data[index] = e;
         }
     
-        public void grow(int newCapacity) {
+        public void Grow(int newCapacity) {
             data.resize(newCapacity);
         }
     
@@ -271,9 +271,9 @@ namespace Artemis.Utils {
          * @param index
          *			index to check
          */
-        public void ensureCapacity(int index) {
+        public void EnsureCapacity(int index) {
             if (index >= data.length) {
-                grow(index * 2);
+                Grow(index * 2);
             }
         }
     
@@ -281,7 +281,7 @@ namespace Artemis.Utils {
          * Removes all of the elements from this bag. The bag will be empty after
          * this call returns.
          */
-        public void clear() {
+        public void Clear() {
             // null all element the slow way so that gc can clean up
             for (var i=0; i < length; i++) {
                 data[i] = null;
@@ -294,9 +294,9 @@ namespace Artemis.Utils {
          * Add all items into this bag.
          * @param items
          */
-        public void addAll(ImmutableBag<E> items) {
-            for (var i = 0; items.size() > i; i++) {
-                add(items[i]);
+        public void AddAll(ImmutableBag<E> items) {
+            for (var i = 0; items.Size() > i; i++) {
+                Add(items[i]);
             }
         }
     
@@ -309,9 +309,9 @@ namespace Artemis.Utils {
          *
          * @return the underlying array
          *
-         * @see Bag#size()
+         * @see Bag#Size()
          */
-        public E[] getData() {
+        public E[] GetData() {
             return data;
         }
         

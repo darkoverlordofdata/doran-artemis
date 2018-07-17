@@ -1,4 +1,4 @@
-using Gee;
+using System.Collections.Generic;
 namespace Artemis.Annotations {
 
     /**
@@ -9,7 +9,7 @@ namespace Artemis.Annotations {
      */
     public class Mapper : Object {
 
-        public static HashMap<string, Object> declaredFields = new HashMap<string, Object>(); 
+        public static Dictionary<string, Object> declaredFields = new Dictionary<string, Object>(); 
 
     }
 }

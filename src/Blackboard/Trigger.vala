@@ -1,70 +1,79 @@
-using Gee;
+using System.Collections.Generic;
 
-namespace Artemis.Blackboard {
+namespace Artemis.Blackboard 
+{
   
-    public class Trigger : Object {
+    public class Trigger : Object 
+    {
   
         private delegate void OnFire(Trigger t);
         /** Occurs when [on fire]. */
         private OnFire onFire;
     
         /** Gets the blackboard. */
-        public BlackBoard blackboard;
+        public BlackBoard BlackBoard;
     
         /** Gets the state of the trigger. */
-        public TriggerStateType triggerStateType;
+        public TriggerStateType TriggerStateType;
     
         /** Gets or sets the entityWorld properties monitored. */
-        public ArrayList<string> worldPropertiesMonitored;
+        public ArrayList<string> WorldPropertiesMonitored;
     
         /** Gets or sets a value indicating whether this instance is fired. */
-        public bool isFired;
+        public bool IsFired;
     
         /**
          * Initializes a new instance of the Trigger class
          * @param propertyName Name of the property.
          */
-        public Trigger(string[] propertyNames) {
-            isFired = false;
-            worldPropertiesMonitored = new ArrayList<string>();
-            worldPropertiesMonitored.add_all_array(propertyNames);
+        public Trigger(string[] propertyName) 
+        {
+            IsFired = false;
+            WorldPropertiesMonitored = new ArrayList<string>();
+            foreach (var item in propertyName)
+            {
+                WorldPropertiesMonitored.Add(item);
+            }
     
         }
     
         /**
          * Removes the this trigger.
          */
-        public void removeThisTrigger() {
-            blackboard.removeTrigger(this);
+        public void RemoveThisTrigger() 
+        {
+            BlackBoard.RemoveTrigger(this);
         }
     
         /**
          * Fires the specified trigger state.
-         * @param triggerStateType
+         * @param TriggerStateType
          */
-        public void fire(TriggerStateType triggerStateType) {
-            isFired = true;
-            triggerStateType = triggerStateType;
-            if (checkConditionToFire()) {
-                calledOnFire(triggerStateType);
+        public void Fire(TriggerStateType triggerStateType) 
+        {
+            IsFired = true;
+            TriggerStateType = triggerStateType;
+            if (CheckConditionToFire()) {
+                CalledOnFire(TriggerStateType);
                 if (onFire != null) {
                     onFire(this);
                 }
             }
-            this.isFired = false;
+            this.IsFired = false;
         }
     
         /**
          * Called if is fired.
-         * @param triggerStateType  State of the trigger.
+         * @param TriggerStateType  State of the trigger.
          */
-        protected void calledOnFire(TriggerStateType triggerStateType) {}
+        protected virtual void CalledOnFire(TriggerStateType triggerStateType) {}
     
         /**
          * Checks the condition to fire.
          * @returns {boolean} if XXXX, false otherwise
          */
-        protected bool checkConditionToFire() {
+        protected virtual bool CheckConditionToFire() 
+        {
             return true;
         }
   

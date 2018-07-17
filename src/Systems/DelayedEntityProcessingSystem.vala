@@ -40,24 +40,24 @@ namespace Artemis.Systems {
             base(aspect);
         }
 
-        protected override void processEntities(ImmutableBag<Entity> entities) {
-            for (var i = 0, s = entities.size(); s > i; i++) {
+        protected override void ProcessEntities(ImmutableBag<Entity> entities) {
+            for (var i = 0, s = entities.Size(); s > i; i++) {
                 var entity = entities[i];
-                processDelta(entity, acc);
-                var remaining = getRemainingDelay(entity);
+                ProcessDelta(entity, acc);
+                var remaining = GetRemainingDelay(entity);
                 if (remaining <= 0) {
-                    processExpired(entity);
+                    ProcessExpired(entity);
                 } else {
-                    offerDelay(remaining);
+                    OfferDelay(remaining);
                 }
             }
-            stop();
+            Stop();
         }
 
-        public void inserted(Entity e) {
-            var delay = getRemainingDelay(e);
+        public void Inserted(Entity e) {
+            var delay = GetRemainingDelay(e);
             if (delay > 0) {
-                offerDelay(delay);
+                OfferDelay(delay);
             }
         }
 
@@ -67,11 +67,11 @@ namespace Artemis.Systems {
         * @param e entity
         * @return delay
         */
-        protected abstract float getRemainingDelay(Entity e);
+        protected abstract float GetRemainingDelay(Entity e);
 
-        protected override bool checkProcessing() {
+        protected override bool CheckProcessing() {
             if (running) {
-                if ((acc += world.getDelta()) >= delay) {
+                if ((acc += World.GetDelta()) >= delay) {
                     return true;
                 }
             }
@@ -86,9 +86,9 @@ namespace Artemis.Systems {
         * @param e the entity to process.
         * @param accumulatedDelta the delta time since this system was last executed.
         */
-        protected abstract void processDelta(Entity e, float accumulatedDelta);
+        protected abstract void ProcessDelta(Entity e, float accumulatedDelta);
 
-        protected abstract void processExpired(Entity e);
+        protected abstract void ProcessExpired(Entity e);
 
 
         /**
@@ -98,7 +98,7 @@ namespace Artemis.Systems {
         *
         * @param delta time delay until processing starts.
         */
-        public void restart(float delay) {
+        public void Restart(float delay) {
             delay = delay;
             acc = 0;
             running = true;
@@ -118,9 +118,9 @@ namespace Artemis.Systems {
         *
         * @param delay
         */
-        public void offerDelay(float delay) {
-            if(!running || delay < getRemainingTimeUntilProcessing()) {
-                restart(delay);
+        public void OfferDelay(float delay) {
+            if(!running || delay < GetRemainingTimeUntilProcessing()) {
+                Restart(delay);
             }
         }
 
@@ -130,7 +130,7 @@ namespace Artemis.Systems {
         *
         * @return the originally set delay.
         */
-        public float getInitialTimeDelay() {
+        public float GetInitialTimeDelay() {
             return delay;
         }
 
@@ -141,7 +141,7 @@ namespace Artemis.Systems {
         *
         * @return time when system will run at.
         */
-        public float getRemainingTimeUntilProcessing() {
+        public float GetRemainingTimeUntilProcessing() {
             if(running) {
                 return delay-acc;
             }
@@ -153,7 +153,7 @@ namespace Artemis.Systems {
         *
         * @return true if it's counting down, false if it's not running.
         */
-        public bool isRunning() {
+        public bool IsRunning() {
             return running;
         }
 
@@ -161,7 +161,7 @@ namespace Artemis.Systems {
          * Stops the system from running, aborts current countdown.
         * Call offerDelay or restart to run it again.
         */
-        public void stop() {
+        public void Stop() {
             running = false;
             acc = 0;
         }

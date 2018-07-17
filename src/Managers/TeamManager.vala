@@ -9,30 +9,30 @@
  * @author Arni Arent
  *
  */
-using Gee;
+using System.Collections.Generic;
 using Artemis.Utils;
 
 namespace Artemis.Managers {
 
     public class TeamManager : Manager {
 
-        private HashMap<string, Bag<string>> playersByTeam;
-        private HashMap<string, string> teamByPlayer;
+        private Dictionary<string, Bag<string>> playersByTeam;
+        private Dictionary<string, string> teamByPlayer;
 
         public TeamManager() {
             base();
-            playersByTeam = new HashMap<string, Bag<string>>();
-            teamByPlayer = new HashMap<string, string>();
+            playersByTeam = new Dictionary<string, Bag<string>>();
+            teamByPlayer = new Dictionary<string, string>();
         }
 
-        public override void initialize() {}
+        public override void Initialize() {}
 
-        public string getTeam(string player) {
+        public string GetTeam(string player) {
             return teamByPlayer[player];
         }
 
-        public void setTeam(string player, string team) {
-            removeFromTeam(player);
+        public void SetTeam(string player, string team) {
+            RemoveFromTeam(player);
 
             teamByPlayer[player] = team;
 
@@ -41,19 +41,19 @@ namespace Artemis.Managers {
                 players = new Bag<string>();
                 playersByTeam[team] = players;
             }
-            players.add(player);
+            players.Add(player);
         }
 
-        public ImmutableBag<string> getPlayers(string team)  {
+        public ImmutableBag<string> GetPlayers(string team)  {
             return playersByTeam[team];
         }
 
-        public void removeFromTeam(string player) {
-            string team;
-            if (teamByPlayer.remove(player, out team)) {
+        public void RemoveFromTeam(string player) {
+            var team = teamByPlayer[player];
+            if (teamByPlayer.Remove(player)) {
                 var players = playersByTeam[team];
                 if (players != null) {
-                    players.remove(player);
+                    players.Remove(player);
                 }
             }
         }

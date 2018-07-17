@@ -1,4 +1,4 @@
-using Gee;
+using System.Collections.Generic;
 namespace Artemis.Annotations {
 
     /**
@@ -17,7 +17,7 @@ namespace Artemis.Annotations {
      */
     public class EntityTemplate : Object {
 
-        public static HashMap<string, Type> entityTemplates = new HashMap<string, Type>(); 
+        public static Dictionary<string, Type> entityTemplates = new Dictionary<string, Type>(); 
 
     }
 }

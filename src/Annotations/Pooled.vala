@@ -1,4 +1,4 @@
-using Gee;
+using System.Collections.Generic;
 namespace Artemis.Annotations {
 
     /**
@@ -14,7 +14,7 @@ namespace Artemis.Annotations {
      */
     public class Pooled : Object {
 
-        public static HashMap<string, Object> pooledComponents = new HashMap<string, Object>(); 
+        public static Dictionary<string, Object> pooledComponents = new Dictionary<string, Object>(); 
 
     }
 }

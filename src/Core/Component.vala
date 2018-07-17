@@ -3,6 +3,7 @@
  * 
  * @author Arni Arent
  */
-namespace Artemis {
+namespace Artemis 
+{
     public class Component : Object {}
 }

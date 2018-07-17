@@ -8,7 +8,7 @@
  * @author Arni Arent
  * 
  */
-using Gee;
+using System.Collections.Generic;
 using Artemis.Utils;
 using Artemis.Annotations;
 
@@ -21,26 +21,30 @@ namespace Artemis {
         private EntityManager em;
         private ComponentManager cm;
     
-        public float delta;
+        private float delta;
         private Bag<Entity> _added;
         private Bag<Entity> _changed;
         private Bag<Entity> _deleted;
         private Bag<Entity> _enable;
         private Bag<Entity> _disable;
     
-        private HashMap<Type, Manager> managers;
+        private Dictionary<Type, Manager> managers;
         private Bag<Manager> managersBag;
         
-        private HashMap<Type, EntitySystem> systems;
+        private Dictionary<Type, EntitySystem> systems;
         private Bag<EntitySystem> systemsBag;
 
-        private HashMap<string, IEntityTemplate> entityTemplates;
+        private Dictionary<string, IEntityTemplate> entityTemplates;
 
         public World() {
-            managers = new HashMap<Type, Manager>();
+        
+            EntitySystem.BlackBoard = new Blackboard.BlackBoard();
+
+
+            managers = new Dictionary<Type, Manager>();
             managersBag = new Bag<Manager>();
             
-            systems = new HashMap<Type, EntitySystem>();
+            systems = new Dictionary<Type, EntitySystem>();
             systemsBag = new Bag<EntitySystem>();
     
             _added = new Bag<Entity>();
@@ -50,19 +54,19 @@ namespace Artemis {
             _disable = new Bag<Entity>();
     
             cm = new ComponentManager();
-            setManager(cm);
+            SetManager(cm);
             
             em = new EntityManager();
-            setManager(em);
+            SetManager(em);
         }
     
         
         /**
          * Makes sure all managers systems are initialized in the order they were added.
         */
-        public void initialize() {
-            for (var i = 0; i < managersBag.size(); i++) {
-                managersBag[i].initialize();
+        public void Initialize() {
+            for (var i = 0; i < managersBag.Size(); i++) {
+                managersBag[i].Initialize();
             }
             
             /** 
@@ -70,10 +74,10 @@ namespace Artemis {
              * 
              * Collect the entity templates
              */
-            entityTemplates = new HashMap<string, IEntityTemplate>();
-            foreach (var entityName in EntityTemplate.entityTemplates.keys) {
+            entityTemplates = new Dictionary<string, IEntityTemplate>();
+            foreach (var entityName in EntityTemplate.entityTemplates.Keys) {
                 var Template = (Type)EntityTemplate.entityTemplates[entityName];
-                setEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
+                SetEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
             }
             
             /** 
@@ -81,10 +85,10 @@ namespace Artemis {
              *
              * Collect the component mappers
              */
-            for (var i = 0; i < systemsBag.size(); i++) {
+            for (var i = 0; i < systemsBag.Size(); i++) {
                 /** Inject the component mappers into each system */
-                ComponentMapperInitHelper.config(systemsBag[i], this);
-                systemsBag[i].initialize();
+                ComponentMapperInitHelper.Config(systemsBag[i], this);
+                systemsBag[i].Initialize();
             }
         }
         
@@ -95,7 +99,7 @@ namespace Artemis {
          * 
          * @return entity manager.
          */
-        public EntityManager getEntityManager() {
+        public EntityManager GetEntityManager() {
             return em;
         }
         
@@ -104,7 +108,7 @@ namespace Artemis {
         * 
         * @return component manager.
         */
-        public ComponentManager getComponentManager() {
+        public ComponentManager GetComponentManager() {
             return cm;
         }
         
@@ -117,10 +121,10 @@ namespace Artemis {
         * 
         * @param manager to be added
         */
-        public Manager setManager(Manager manager) {
+        public Manager SetManager(Manager manager) {
             managers[manager.get_type()] = manager;
-            managersBag.add(manager);
-            manager.setWorld(this);
+            managersBag.Add(manager);
+            manager.SetWorld(this);
             return manager;
         }
     
@@ -132,7 +136,7 @@ namespace Artemis {
         *            class type of the manager
         * @return the manager
         */
-        public T getManager<T>(Type managerType) {
+        public T GetManager<T>(Type managerType) {
             return managers[managerType];
         }
         
@@ -140,9 +144,9 @@ namespace Artemis {
          * Deletes the manager from this world.
         * @param manager to delete.
         */
-        public void deleteManager(Manager manager) {
-            managers.remove(manager.get_type());
-            managersBag.remove(manager);
+        public void DeleteManager(Manager manager) {
+            managers.Remove(manager.get_type());
+            managersBag.Remove(manager);
         }
         
         
@@ -151,7 +155,7 @@ namespace Artemis {
         * 
         * @return delta time since last game loop.
         */
-        public float getDelta() {
+        public float GetDelta() {
             return delta;
         }
     
@@ -160,7 +164,7 @@ namespace Artemis {
         * 
         * @param delta time since last game loop.
         */
-        public void setDelta(float delta) {
+        public void SetDelta(float delta) {
             delta = delta;
         }
     
@@ -170,8 +174,8 @@ namespace Artemis {
         * 
         * @param e entity
         */
-        public void addEntity(Entity e) {
-            _added.add(e);
+        public void AddEntity(Entity e) {
+            _added.Add(e);
         }
         
         /**
@@ -181,8 +185,8 @@ namespace Artemis {
         * 
         * @param e entity
         */
-        public void changedEntity(Entity e) {
-            _changed.add(e);
+        public void ChangedEntity(Entity e) {
+            _changed.Add(e);
         }
         
         /**
@@ -190,9 +194,9 @@ namespace Artemis {
         * 
         * @param e entity
         */
-        public void deleteEntity(Entity e) {
-            if (!_deleted.contains(e)) {
-                _deleted.add(e);
+        public void DeleteEntity(Entity e) {
+            if (!_deleted.Contains(e)) {
+                _deleted.Add(e);
             }
         }
     
@@ -200,16 +204,16 @@ namespace Artemis {
          * (Re)enable the entity in the world, after it having being disabled.
         * Won't do anything unless it was already disabled.
         */
-        public void enable(Entity e) {
-            _enable.add(e);
+        public void Enable(Entity e) {
+            _enable.Add(e);
         }
     
         /**
          * Disable the entity from being processed. Won't delete it, it will
         * continue to exist but won't get processed.
         */
-        public void disable(Entity e) {
-            _disable.add(e);
+        public void Disable(Entity e) {
+            _disable.Add(e);
         }
     
     
@@ -220,8 +224,8 @@ namespace Artemis {
         * @param name optional name for debugging
         * @return entity
         */
-        public Entity createEntity(string name="") {
-            return em.createEntityInstance(name);
+        public Entity CreateEntity(string name="") {
+            return em.CreateEntityInstance(name);
         }
     
         /**
@@ -230,8 +234,8 @@ namespace Artemis {
         * @param entityId
         * @return entity
         */
-        public Entity getEntity(int entityId) {
-            return em.getEntity(entityId);
+        public Entity GetEntity(int entityId) {
+            return em.GetEntity(entityId);
         }
     
     
@@ -240,7 +244,7 @@ namespace Artemis {
         * 
         * @return all entity systems in world.
         */
-        public ImmutableBag<EntitySystem> getSystems() {
+        public ImmutableBag<EntitySystem> GetSystems() {
             return systemsBag;
         }
     
@@ -263,12 +267,12 @@ namespace Artemis {
         */
         //	public <T extends EntitySystem> T setSystem(T system, boolean passive) {
 
-        public T setSystem<T>(EntitySystem system, bool passive=false) {
-            system.setWorld(this);
-            system.setPassive(passive);
+        public T SetSystem<T>(EntitySystem system, bool passive=false) {
+            system.SetWorld(this);
+            system.SetPassive(passive);
             
             systems[system.get_type()] = system;
-            systemsBag.add(system);
+            systemsBag.Add(system);
             
             return system;
         }
@@ -277,19 +281,19 @@ namespace Artemis {
          * Removed the specified system from the world.
         * @param system to be deleted from world.
         */
-        public void deleteSystem(EntitySystem system) {
-            systems.remove(system.get_type());
-            systemsBag.remove(system);
+        public void DeleteSystem(EntitySystem system) {
+            systems.Remove(system.get_type());
+            systemsBag.Remove(system);
         }
         
-        private void notifySystems(Performer perform, Entity e) {
-            for (var i = 0, s=systemsBag.size(); s > i; i++) {
+        private void NotifySystems(Performer perform, Entity e) {
+            for (var i = 0, s=systemsBag.Size(); s > i; i++) {
                 perform(systemsBag[i], e);
             }
         }
     
-        private void notifyManagers(Performer perform, Entity e) {
-            for (var a = 0, s = managersBag.size(); s > a; a++) {
+        private void NotifyManagers(Performer perform, Entity e) {
+            for (var a = 0, s = managersBag.Size(); s > a; a++) {
                 perform(managersBag[a], e);
             }
         }
@@ -300,8 +304,8 @@ namespace Artemis {
         * @param type type of system.
         * @return instance of the system in this world.
         */
-        public EntitySystem getSystem(Type type) {
-            return systems.get(type);
+        public EntitySystem GetSystem(Type type) {
+            return systems[type];
         }
 
         /**
@@ -309,14 +313,14 @@ namespace Artemis {
         * @param entities
         * @param performer
         */
-        private void check(Bag<Entity> entities, Performer perform) {
-            if (!entities.isEmpty()) {
-                for (var i = 0, s = entities.size(); s > i; i++) {
+        private void Check(Bag<Entity> entities, Performer perform) {
+            if (!entities.IsEmpty()) {
+                for (var i = 0, s = entities.Size(); s > i; i++) {
                     var e = entities[i];
-                    notifyManagers(perform, e);
-                    notifySystems(perform, e);
+                    NotifyManagers(perform, e);
+                    NotifySystems(perform, e);
                 }
-                entities.clear();
+                entities.Clear();
             }
         }
     
@@ -324,20 +328,20 @@ namespace Artemis {
         /**
          * Process all non-passive systems.
         */
-        public void process() {
+        public void Process() {
 
-            check(_added, (observer, e) => observer.added(e));
-            check(_changed, (observer, e) => observer.changed(e));
-            check(_disable, (observer, e) => observer.disabled(e));
-            check(_enable, (observer, e) => observer.enabled(e));
-            check(_deleted, (observer, e) => observer.deleted(e));
+            Check(_added,   (observer, e) => observer.Added(e));
+            Check(_changed, (observer, e) => observer.Changed(e));
+            Check(_disable, (observer, e) => observer.Disabled(e));
+            Check(_enable,  (observer, e) => observer.Enabled(e));
+            Check(_deleted, (observer, e) => observer.Deleted(e));
             
-            cm.clean();
+            cm.Clean();
             
-            for (var i = 0; systemsBag.size() > i; i++) {
+            for (var i = 0; systemsBag.Size() > i; i++) {
                 var system = systemsBag[i];
-                if(!system.isPassive()) {
-                    system.process();
+                if(!system.IsPassive()) {
+                    system.Process();
                 }
             }
         }
@@ -349,8 +353,8 @@ namespace Artemis {
         * @param type of component to get mapper for.
         * @return mapper for specified component type.
         */
-        public ComponentMapper<T> getMapper<T>(Type type) {
-            return ComponentMapper.getFor<T>(type, this);
+        public ComponentMapper<T> GetMapper<T>(Type type) {
+            return ComponentMapper.GetFor<T>(type, this);
         }
 
 
@@ -360,7 +364,7 @@ namespace Artemis {
          * @param entityTag
          * @param entityTemplate
          */
-        public void setEntityTemplate(string entityTag, IEntityTemplate entityTemplate) {
+        public void SetEntityTemplate(string entityTag, IEntityTemplate entityTemplate) {
             entityTemplates[entityTag] = entityTemplate;
         }
         /**
@@ -371,16 +375,16 @@ namespace Artemis {
          * @returns {Entity}
          * EntityTemplate
          */
-        public Entity createEntityFromTemplate(string name, ...) {
-            return entityTemplates[name].buildEntity(createEntity(), this);
+        public Entity CreateEntityFromTemplate(string name, ...) {
+            return entityTemplates[name].BuildEntity(CreateEntity(), this);
         }
 
     }
         
 
-    class ComponentMapperInitHelper {
+    internal class ComponentMapperInitHelper {
 
-        public static void config(EntitySystem target, World world) {
+        public static void Config(EntitySystem target, World world) {
 
             /**
              * find the Mapper.declaredFields for this system

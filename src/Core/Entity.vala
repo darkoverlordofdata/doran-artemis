@@ -1,7 +1,7 @@
 using Artemis.Utils;
 
-namespace Artemis {
-  
+namespace Artemis 
+{  
     /**
     * The entity class. Cannot be instantiated outside the framework, you must
     * create new entities using World.
@@ -9,9 +9,10 @@ namespace Artemis {
     * @author Arni Arent
     * 
     */
-    public class Entity : Object {
-        public string uuid;
-        public string name;
+    public class Entity : Object 
+    {
+        private string uuid;
+        private string name;
     
         private int id;
         private BitSet componentBits;
@@ -21,16 +22,17 @@ namespace Artemis {
         private EntityManager entityManager;
         private ComponentManager componentManager;
         
-        public Entity(World world, int id, string name = "") {
+        public Entity(World world, int id, string name = "") 
+        {
             this.world = world;
             this.id = id;
             this.name = name;
-            entityManager = world.getEntityManager();
-            componentManager = world.getComponentManager();
+            entityManager = world.GetEntityManager();
+            componentManager = world.GetComponentManager();
             systemBits = new BitSet();
             componentBits = new BitSet();
             
-            reset();
+            Reset();
         }
       
         /**
@@ -40,7 +42,8 @@ namespace Artemis {
         * 
         * @return id of the entity.
         */
-        public int getId() {
+        public int GetId() 
+        {
             return id;
         }
       
@@ -48,7 +51,8 @@ namespace Artemis {
          * Returns a BitSet instance containing bits of the components the entity possesses.
         * @return
         */
-        public BitSet getComponentBits() {
+        public BitSet GetComponentBits() 
+        {
             return componentBits;
         }
         
@@ -56,7 +60,8 @@ namespace Artemis {
          * Returns a BitSet instance containing bits of the components the entity possesses.
         * @return
         */
-        public BitSet getSystemBits() {
+        public BitSet GetSystemBits() 
+        {
             return systemBits;
         }
     
@@ -64,27 +69,32 @@ namespace Artemis {
          * Make entity ready for re-use.
         * Will generate a new uuid for the entity.
         */
-        protected void reset() {
-            systemBits.clear();
-            componentBits.clear();
-            uuid = UUID.randomUUID();
+        protected void Reset() 
+        {
+            systemBits.Clear();
+            componentBits.Clear();
+            uuid = UUID.RandomUUID();
         }
       
           
-        public string toString() {
+        public string ToString() 
+        {
             return "Entity[%d]".printf(id);
         }
 
-        public T createComponent<T>(Type type, ...) {
-            var componentManager = this.world.getComponentManager();
-            var component = componentManager.create<T>(this, type);
+        public T CreateComponent<T>(Type type, ...) 
+        {
+            var componentManager = this.world.GetComponentManager();
+            var component = componentManager.Create<T>(this, type);
+            // var ls = va_list();
+
             //  if (args.length) {
             //      (<any>component).initialize(...args);
             //  }
 
-            var tf = this.world.getComponentManager().typeFactory;
-            var componentType = tf.getTypeFor(type);
-            componentBits.set(componentType.getIndex());
+            var tf = this.world.GetComponentManager().TypeFactory;
+            var componentType = tf.GetTypeFor(type);
+            componentBits[componentType.GetIndex()] = true;
 
             return component;
     
@@ -98,7 +108,7 @@ namespace Artemis {
           * @return this entity for chaining.
           */
           // public addComponent(component: Component):Entity {
-          // 	this.addComponent(component, ComponentType.getTypeFor(component.getClass()));
+          // 	this.addComponent(component, ComponentType.GetTypeFor(component.getClass()));
           // 	return this;
           // }
           
@@ -111,22 +121,24 @@ namespace Artemis {
           * 
           * @return this entity for chaining.
           */
-        public Entity addComponent(Component component, ...) {
+        public Entity AddComponent(Component component, ...) 
+        {
 
             var type = component.get_type();
-            var tf = this.world.getComponentManager().typeFactory;
-            var componentType = tf.getTypeFor(type);
-            componentBits.set(componentType.getIndex());
+            var tf = this.world.GetComponentManager().TypeFactory;
+            var componentType = tf.GetTypeFor(type);
+            componentBits[componentType.GetIndex()] = true;
   
             //  var c1 = createComponent(component.get_type());
-            //  type = this.getTypeFor(c1.get_type());
+            //  type = this.GetTypeFor(c1.get_type());
     
             //  this.componentManager.addComponent(this, type, c1);
             return this;
         }
   
-        private ComponentType getTypeFor(Type c) {
-            return world.getComponentManager().typeFactory.getTypeFor(c);
+        private ComponentType GetTypeFor(Type c) 
+        {
+            return world.GetComponentManager().TypeFactory.GetTypeFor(c);
         }
         /**
          * Removes the component from this entity.
@@ -135,8 +147,9 @@ namespace Artemis {
          * 
          * @return this entity for chaining.
          */
-        public Entity removeComponentInstance(Component component) {
-            removeComponent(getTypeFor(component.get_type()));
+        public Entity RemoveComponentInstance(Component component) 
+        {
+            RemoveComponent(GetTypeFor(component.get_type()));
             return this;
         }
       
@@ -147,8 +160,9 @@ namespace Artemis {
         * 
         * @return this entity for chaining.
         */
-        public Entity removeComponent(ComponentType type) {
-            componentManager.removeComponent(this, type);
+        public Entity RemoveComponent(ComponentType type) 
+        {
+            componentManager.RemoveComponent(this, type);
             return this;
         }
           
@@ -158,8 +172,9 @@ namespace Artemis {
         * 
         * @return this entity for chaining.
         */
-        public Entity removeComponentByType(Type type) {
-            removeComponent(getTypeFor(type));
+        public Entity RemoveComponentByType(Type type) 
+        {
+            RemoveComponent(GetTypeFor(type));
             return this;
         }
       
@@ -169,8 +184,9 @@ namespace Artemis {
         * 
         * @return if it's active.
         */
-        public bool isActive() {
-            return entityManager.isActive(id);
+        public bool IsActive() 
+        {
+            return entityManager.IsActive(id);
         }
           
         /**
@@ -180,8 +196,9 @@ namespace Artemis {
         * 
         * @return if it's enabled
         */
-        public bool isEnabled() {
-            return entityManager.isEnabled(id);
+        public bool IsEnabled() 
+        {
+            return entityManager.IsEnabled(id);
         }
           
         /**
@@ -195,8 +212,9 @@ namespace Artemis {
         *            ComponentType instance for the expected component.
         * @return
         */
-        public Component getComponent(ComponentType type) {
-            return componentManager.getComponent(this, type);
+        public Component GetComponent(ComponentType type) 
+        {
+            return componentManager.GetComponent(this, type);
         }
       
         /**
@@ -210,8 +228,9 @@ namespace Artemis {
         *            the expected return component type.
         * @return component that matches, or null if none is found.
         */
-        public Component getComponentByType(Type type) {
-            return componentManager.getComponent(this, getTypeFor(type));
+        public Component GetComponentByType(Type type) 
+        {
+            return componentManager.GetComponent(this, GetTypeFor(type));
         }
       
         /**
@@ -221,8 +240,9 @@ namespace Artemis {
         * @param fillBag the bag to put the components into.
         * @return the fillBag with the components in.
         */
-        public Bag<Component> getComponents(Bag<Component> fillBag) {
-            return componentManager.getComponentsFor(this, fillBag);
+        public Bag<Component> GetComponents(Bag<Component> fillBag) 
+        {
+            return componentManager.GetComponentsFor(this, fillBag);
         }
       
         /**
@@ -231,38 +251,43 @@ namespace Artemis {
         * relevant systems. It is typical to call this after adding components to a
         * newly created entity.
         */
-        public void addToWorld() {
-            world.addEntity(this);
+        public void AddToWorld() 
+        {
+            world.AddEntity(this);
         }
           
         /**
          * This entity has changed, a component added or deleted.
         */
-        public void changedInWorld() {
-            world.changedEntity(this);
+        public void ChangedInWorld() 
+        {
+            world.ChangedEntity(this);
         }
       
         /**
          * Delete this entity from the world.
         */
-        public void deleteFromWorld() {
-            world.deleteEntity(this);
+        public void DeleteFromWorld() 
+        {
+            world.DeleteEntity(this);
         }
           
         /**
          * (Re)enable the entity in the world, after it having being disabled.
         * Won't do anything unless it was already disabled.
         */
-        public void enable() {
-            world.enable(this);
+        public void Enable() 
+        {
+            world.Enable(this);
         }
           
         /**
          * Disable the entity from being processed. Won't delete it, it will
         * continue to exist but won't get processed.
         */
-        public void disable() {
-            world.disable(this);
+        public void Disable() 
+        {
+            world.Disable(this);
         }
           
         /**
@@ -270,7 +295,8 @@ namespace Artemis {
         * This UUID is unique per entity (re-used entities get a new UUID).
         * @return uuid instance for this entity.
         */
-        public string getUuid() {
+        public string GetUuid() 
+        {
             return uuid;
         }
       
@@ -278,9 +304,9 @@ namespace Artemis {
          * Returns the world this entity belongs to.
         * @return world of entity.
         */
-        public World getWorld() {
+        public World GetWorld() 
+        {
             return world;
         }
     }
 }
-

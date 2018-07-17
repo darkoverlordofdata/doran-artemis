@@ -6,6 +6,6 @@ namespace Artemis {
      * Expects no <code>final</code> fields.
      */
     public class PooledComponent : Component {
-        public void reset(){}
+        public void Reset(){}
     }
 }

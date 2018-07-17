@@ -22,11 +22,12 @@
  */
 using Artemis.Utils;
 
-namespace Artemis {
+namespace Artemis 
+{
 
-    public class Aspect : Object {
-
-        public static ComponentTypeFactory typeFactory;
+    public class Aspect : Object 
+    {
+        public static ComponentTypeFactory TypeFactory;
         private BitSet allSet;
         private BitSet exclusionSet;
         private BitSet oneSet;
@@ -35,7 +36,8 @@ namespace Artemis {
         /**
          * @constructor
          */
-        public Aspect() {
+        public Aspect() 
+        {
             allSet = new BitSet();
             exclusionSet = new BitSet();
             oneSet = new BitSet();
@@ -45,24 +47,28 @@ namespace Artemis {
          *
          * @param {artemis.World} world
          */
-        public void setWorld(World world) {
+        public void SetWorld(World world) 
+        {
             this.world = world;
         }
         
-        public BitSet getAllSet() {
+        public BitSet GetAllSet() 
+        {
             return allSet;
         }
 
-        public BitSet getExclusionSet() {
+        public BitSet GetExclusionSet() 
+        {
             return exclusionSet;
         }
 
-        public BitSet getOneSet() {
+        public BitSet GetOneSet() 
+        {
             return oneSet;
         }
 
         //  private int getIndexFor(Component c) {
-        //      return Aspect.typeFactory.getIndexFor(c.get_type());
+        //      return Aspect.TypeFactory.getIndexFor(c.get_type());
         //  }
         
         /**
@@ -71,9 +77,11 @@ namespace Artemis {
          * @param {Array<Type>} types a required component type
          * @return {artemis.Aspect} an aspect that can be matched against entities
          */
-        public Aspect all(Type[] types) {
-            foreach (var t in types) {
-                allSet.set(Aspect.typeFactory.getIndexFor(types[t]));
+        public Aspect All(Type[] types) 
+        {
+            foreach (var t in types) 
+            {
+                allSet[Aspect.TypeFactory.GetIndexFor(t)] = true;
             }
     
             return this;
@@ -87,9 +95,11 @@ namespace Artemis {
          * @param {Array<Type>} types component type to exclude
          * @return {artemis.Aspect} an aspect that can be matched against entities
          */
-        public Aspect exclude(Type[] types) {
-            foreach (var t in types) {
-                exclusionSet.set(Aspect.typeFactory.getIndexFor(types[t]));
+        public Aspect Exclude(Type[] types) 
+        {
+            foreach (var t in types) 
+            {
+                exclusionSet[Aspect.TypeFactory.GetIndexFor(t)] = true;
             }
             return this;
         }
@@ -101,9 +111,11 @@ namespace Artemis {
          * @param {Array<Type>} types one of the types the entity must possess
          * @return {artemis.Aspect} an aspect that can be matched against entities
          */
-        public Aspect one(Type[] types) {
-            foreach (var t in types) {
-            oneSet.set(Aspect.typeFactory.getIndexFor(types[t]));
+        public Aspect One(Type[] types) 
+        {
+            foreach (var t in types) 
+            {
+                oneSet[Aspect.TypeFactory.GetIndexFor(t)] = true;
             }
             return this;
         }
@@ -118,8 +130,9 @@ namespace Artemis {
          * @deprecated
          * @see getAspectForAll
          */
-        public static Aspect getAspectFor(Type[] types) {
-            return Aspect.getAspectForAll(types);
+        public static Aspect GetAspectFor(Type[] types) 
+        {
+            return Aspect.GetAspectForAll(types);
         }
 
         /**
@@ -129,9 +142,10 @@ namespace Artemis {
          * @param {Array<Type>} types a required component type
          * @return {artemis.Aspect} an aspect that can be matched against entities
          */
-        public static Aspect getAspectForAll(Type[] types) {
+        public static Aspect GetAspectForAll(Type[] types) 
+        {
             var aspect = new Aspect();
-            aspect.all(types);
+            aspect.All(types);
             return aspect;
         }
         
@@ -142,9 +156,10 @@ namespace Artemis {
          * @param {Array<Type>} types one of the types the entity must possess
          * @return {artemis.Aspect} an aspect that can be matched against entities
          */
-        public static Aspect getAspectForOne(Type[] types) {
+        public static Aspect GetAspectForOne(Type[] types) 
+        {
             var aspect = new Aspect();
-            aspect.one(types);
+            aspect.One(types);
             return aspect;
         }
     
@@ -159,7 +174,8 @@ namespace Artemis {
          *
          * @return {artemis.Aspect} an empty Aspect that will reject all entities.
          */
-        public static Aspect getEmpty() {
+        public static Aspect GetEmpty() 
+        {
             return new Aspect();
         }
     }

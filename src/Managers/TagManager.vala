@@ -5,50 +5,50 @@
  * @author Arni Arent
  *
  */
-using Gee;
+using System.Collections.Generic;
 using Artemis.Utils;
 
 namespace Artemis.Managers {
 
     public class TagManager : Manager {
 
-        private HashMap<string, Entity> entitiesByTag;
-        private HashMap<Entity, string> tagsByEntity;
+        private Dictionary<string, Entity> entitiesByTag;
+        private Dictionary<Entity, string> tagsByEntity;
 
         public TagManager() {
             base();
-            entitiesByTag = new HashMap<string, Entity>();
-            tagsByEntity = new HashMap<Entity, string>();
+            entitiesByTag = new Dictionary<string, Entity>();
+            tagsByEntity = new Dictionary<Entity, string>();
         }
 
-        public void register(string tag, Entity e) {
+        public void Register(string tag, Entity e) {
             entitiesByTag[tag] = e;
             tagsByEntity[e] = tag;
         }
 
-        public void unregister(string tag) {
-            tagsByEntity.unset(entitiesByTag[tag]);
-            entitiesByTag.unset(tag);
+        public void Unregister(string tag) {
+            tagsByEntity.Remove(entitiesByTag[tag]);
+            entitiesByTag.Remove(tag);
         }
 
-        public bool isRegistered(string tag) {
-            return entitiesByTag.has_key(tag);
+        public bool IsRegistered(string tag) {
+            return entitiesByTag.ContainsKey(tag);
         }
 
-        public Entity getEntity(string tag) {
+        public Entity GetEntity(string tag) {
             return entitiesByTag[tag];
         }
 
-        public string[] getRegisteredTags() {
-            return tagsByEntity.values.to_array();
+        public string[] GetRegisteredTags() {
+            return tagsByEntity.Values.ToArray();
         }
 
-        public override void deleted(Entity e) {
-            entitiesByTag.unset(tagsByEntity[e]);
-            tagsByEntity.unset(e);
+        public override void Deleted(Entity e) {
+            entitiesByTag.Remove(tagsByEntity[e]);
+            tagsByEntity.Remove(e);
         }
 
-        public override void initialize() {}
+        public override void Initialize() {}
 
     }
 }

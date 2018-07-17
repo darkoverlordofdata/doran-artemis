@@ -19,17 +19,17 @@ namespace Artemis.Systems {
          * Process a entity this system is interested in.
         * @param e the entity to process.
         */
-        protected abstract void processEach(Entity e);
+        protected abstract void ProcessEach(Entity e);
 
 
-        protected override void processEntities(ImmutableBag<Entity> entities) {
-            for (var i = 0, s = entities.size(); s > i; i++) {
-                this.processEach(entities[i]);
+        protected override void ProcessEntities(ImmutableBag<Entity> entities) {
+            for (var i = 0, s = entities.Size(); s > i; i++) {
+                ProcessEach(entities[i]);
             }
         }
 
 
-        protected override bool checkProcessing() {
+        protected override bool CheckProcessing() {
             return true;
         }
 

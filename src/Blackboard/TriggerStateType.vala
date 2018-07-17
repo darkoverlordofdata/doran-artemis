@@ -1,8 +1,8 @@
-namespace Artemis.Blackboard {
-
-
+namespace Artemis.Blackboard 
+{
     [Flags]
-    public enum TriggerStateType {
+    public enum TriggerStateType 
+    {
         ValueAdded   = 0x00001,
         ValueRemoved = 0x00010,
         ValueChanged = 0x00100,

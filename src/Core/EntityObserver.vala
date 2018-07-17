@@ -2,15 +2,15 @@ namespace Artemis {
       
     public interface EntityObserver : Object {
         
-        public abstract void added(Entity e);
+        public abstract void Added(Entity e);
         
-        public abstract void changed(Entity e);
+        public abstract void Changed(Entity e);
         
-        public abstract void deleted(Entity e);
+        public abstract void Deleted(Entity e);
         
-        public abstract void enabled(Entity e);
+        public abstract void Enabled(Entity e);
         
-        public abstract void disabled(Entity e);
+        public abstract void Disabled(Entity e);
         
     }
 }

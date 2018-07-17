@@ -24,7 +24,8 @@ namespace Artemis.Utils {
         return (n - ((x << 1) >> 63));
     }
   
-    public class BitSet : Object {
+    public class BitSet : Object 
+    {
 
         private uint[] words;
 
@@ -41,8 +42,8 @@ namespace Artemis.Utils {
             }
         }
 
-        public int nextSetBit(int fromIndex) {
-
+        public int NextSetBit(int fromIndex) 
+        {
             var u = fromIndex >> ADDRESS_BITS_PER_WORD;
             var words = this.words;
             var wordsInUse = words.length;
@@ -57,7 +58,8 @@ namespace Artemis.Utils {
             }
         }
 
-        public bool intersects(BitSet set) {
+        public bool Intersects(BitSet set) 
+        {
             var words = this.words;
             var wordsInUse = words.length;
 
@@ -68,11 +70,13 @@ namespace Artemis.Utils {
 
         }
 
-        public bool isEmpty() {
+        public bool IsEmpty() 
+        {
             return this.words.length == 0;
         }
 
-        public uint set(int bitIndex, bool value=true) {
+        public void set(int bitIndex, bool value) 
+        {
             var wordIndex = bitIndex >> ADDRESS_BITS_PER_WORD;
             var words = this.words;
             var wordsInUse = words.length;
@@ -86,15 +90,15 @@ namespace Artemis.Utils {
             }
 
             if (value) {
-                return words[wordIndex] |= (1 << bitIndex);
+                words[wordIndex] |= (1 << bitIndex);
             } else {
-                return words[wordIndex] &= ~(1 << bitIndex);
+                words[wordIndex] &= ~(1 << bitIndex);
             }
         }
 
 
-        public bool get(int bitIndex) {
-
+        public bool get(int bitIndex) 
+        {
             var wordIndex = bitIndex >> ADDRESS_BITS_PER_WORD;
             var words = this.words;
             var wordsInUse = words.length;
@@ -103,7 +107,8 @@ namespace Artemis.Utils {
         }
 
 
-        public void clear(int bitIndex=-1)  {
+        public void Clear(int bitIndex=-1)  
+        {
             if (bitIndex == -1) {
                 var words = this.words;
                 var wordsInUse = words.length;

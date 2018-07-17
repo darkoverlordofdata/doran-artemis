@@ -1,13 +1,15 @@
 using Artemis.Utils;
 using Artemis.Annotations;
 
-namespace Artemis {
-  
-    public enum Taxonomy {
+namespace Artemis 
+{
+    public enum Taxonomy 
+    {
       BASIC, POOLED 
     }
 
-    public class ComponentType : Object {
+    public class ComponentType : Object 
+    {
         private static int INDEX = 0;
         public static ComponentManager componentManager;
     
@@ -15,7 +17,8 @@ namespace Artemis {
         private Type type;
         private Taxonomy taxonomy;
 
-        public ComponentType(Type type, int index) {
+        public ComponentType(Type type, int index) 
+        {
             this.index = ComponentType.INDEX++;
             this.type = type;
             if (Pooled.pooledComponents[type.name()] == (Object)type) {
@@ -25,21 +28,24 @@ namespace Artemis {
             }
         }
 
-        public string getName() {
+        public string GetName() 
+        {
             return type.name();
         }
 
-        public int getIndex() {
-            return this.index;
+        public int GetIndex() 
+        {
+            return index;
         }
 
-        public Taxonomy getTaxonomy() {
-        return this.taxonomy;
+        public Taxonomy GetTaxonomy() 
+        {
+            return taxonomy;
         }
         
-        public string toString() {
+        public string ToString() 
+        {
             return "ComponentType (%d)".printf(index);
         }
-    
     }
-  }
+}

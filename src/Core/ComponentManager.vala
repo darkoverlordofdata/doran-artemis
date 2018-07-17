@@ -1,63 +1,65 @@
 using Artemis.Utils;
 
-namespace Artemis {
-  
-      
-    public class ComponentManager : Manager {
-
+namespace Artemis 
+{
+    public class ComponentManager : Manager 
+    {
         private Bag<Bag<Component>> componentsByType;
         private ComponentPool pooledComponents;
-        private Bag<Entity> _deleted;
-        public ComponentTypeFactory typeFactory;
+        private Bag<Entity> deleted;
+        public ComponentTypeFactory TypeFactory;
   
-        public ComponentManager() {
+        public ComponentManager() 
+        {
             base();
             componentsByType = new Bag<Bag<Component>>();
             pooledComponents = new ComponentPool();
-            _deleted = new Bag<Entity>();
+            deleted = new Bag<Entity>();
   
-            typeFactory = new ComponentTypeFactory();
+            TypeFactory = new ComponentTypeFactory();
         }
           
-        public override void initialize() {}
+        public override void Initialize() {}
   
-        public T create<T>(Entity owner, Type componentClass) {
-  
-            var type = typeFactory.getTypeFor(componentClass);
+        public T Create<T>(Entity owner, Type componentClass) 
+        {
+            var type = TypeFactory.GetTypeFor(componentClass);
             T component = null;
     
-            switch (type.getTaxonomy()) {
+            switch (type.GetTaxonomy()) {
             case Taxonomy.BASIC:
                 //console.log('create BASIC');
-                component = newInstance<T>(componentClass);
+                component = NewInstance<T>(componentClass);
                 break;
             case Taxonomy.POOLED:
                 //console.log('create POOLED');
-                reclaimPooled(owner, type);
+                ReclaimPooled(owner, type);
                 /**
                  * YUK! <T> is not working here.
                  * It should be ok, since it will be the same as 'type'
                  */
-                component = pooledComponents.obtain(componentClass, type);
+                component = pooledComponents.Obtain(componentClass, type);
                 break;
             default:
-                throw new ArtemisException.InvalidComponent("unknown component type %s",type.getTaxonomy().to_string());
+                throw new ArtemisException.InvalidComponent("unknown component type %s",type.GetTaxonomy().to_string());
             }
-            addComponent(owner, type, (Component)component);
+            AddComponent(owner, type, (Component)component);
             return component;
         }
   
-        private void reclaimPooled(Entity owner, ComponentType type) {
-            Bag<Component> components = componentsByType.safeGet(type.getIndex());
+        private void ReclaimPooled(Entity owner, ComponentType type) 
+        {
+            Bag<Component> components = componentsByType.SafeGet(type.GetIndex());
             if (components == null)
                 return;
-            PooledComponent? old = (PooledComponent)components.safeGet(owner.getId());
+            PooledComponent? old = (PooledComponent)components.SafeGet(owner.GetId());
             if (old != null) {
-                pooledComponents.free(old, type);
+                pooledComponents.Free(old, type);
             }
         }
     
-        public T newInstance<T>(Type type) {
+        public T NewInstance<T>(Type type) 
+        {
             return Object.new(type);
         }
         //  public T newInstance<T>(Type type, bool constructorHasWorldParameter) {
@@ -74,30 +76,31 @@ namespace Artemis {
          * @param e
          *			the entity to remove components from
         */
-        private void removeComponentsOfEntity(Entity e) {
-            var componentBits = e.getComponentBits();
-            for (var i = componentBits.nextSetBit(0); i >= 0; i = componentBits.nextSetBit(i+1)) {
+        private void RemoveComponentsOfEntity(Entity e) 
+        {
+            var componentBits = e.GetComponentBits();
+            for (var i = componentBits.NextSetBit(0); i >= 0; i = componentBits.NextSetBit(i+1)) {
 
-                switch(typeFactory.getTaxonomy(i)) {
+                switch(TypeFactory.GetTaxonomy(i)) {
 
                 case Taxonomy.BASIC:
                     //console.log('remove BASIC');
-                    componentsByType[i].set(e.getId(), null);
+                    componentsByType[i].set(e.GetId(), null);
                     break;
 
                 case Taxonomy.POOLED:
                     //console.log('remove POOLED');
-                    var pooled = componentsByType[i][e.getId()];
-                    pooledComponents.freeByIndex((PooledComponent)pooled, i);
-                    componentsByType[i].set(e.getId(), null);
+                    var pooled = componentsByType[i][e.GetId()];
+                    pooledComponents.FreeByIndex((PooledComponent)pooled, i);
+                    componentsByType[i].set(e.GetId(), null);
                     break;
 
                 default:
-                    throw new ArtemisException.InvalidComponent("unknown component type %s",typeFactory.getTaxonomy(i).to_string());
+                    throw new ArtemisException.InvalidComponent("unknown component type %s", TypeFactory.GetTaxonomy(i).to_string());
 
                 }
             }
-            componentBits.clear();
+            componentBits.Clear();
         }
     
         /**
@@ -114,18 +117,19 @@ namespace Artemis {
         * @param component
         *			the component to add
         */
-        public void addComponent(Entity e, ComponentType type, Component component) {
-            componentsByType.ensureCapacity(type.getIndex());
+        public void AddComponent(Entity e, ComponentType type, Component component) 
+        {
+            componentsByType.EnsureCapacity(type.GetIndex());
 
-            Bag<Component> components = componentsByType[type.getIndex()];
+            Bag<Component> components = componentsByType[type.GetIndex()];
             if(components == null) {
                 components = new Bag<Component>();
-                componentsByType.set(type.getIndex(), components);
+                componentsByType.set(type.GetIndex(), components);
             }
             
-            components.set(e.getId(), component);
+            components.set(e.GetId(), component);
 
-            e.getComponentBits().set(type.getIndex());
+            e.GetComponentBits()[type.GetIndex()] = true;
         }
     
         /**
@@ -136,21 +140,22 @@ namespace Artemis {
         * @param type
         *			the type of component being removed
         */
-        public void removeComponent(Entity e, ComponentType type) {
-            var index = type.getIndex();
-            switch (type.getTaxonomy()) {
+        public void RemoveComponent(Entity e, ComponentType type) 
+        {
+            var index = type.GetIndex();
+            switch (type.GetTaxonomy()) {
                 case Taxonomy.BASIC:
-                    componentsByType[index].set(e.getId(), null);
-                    e.getComponentBits().clear(type.getIndex());
+                    componentsByType[index].set(e.GetId(), null);
+                    e.GetComponentBits().Clear(type.GetIndex());
                     break;
                 case Taxonomy.POOLED:
-                    var pooled = componentsByType[index][e.getId()];
-                    e.getComponentBits().clear(type.getIndex());
-                    pooledComponents.free((PooledComponent)pooled, type);
-                    componentsByType[index][e.getId()] = null;
+                    var pooled = componentsByType[index][e.GetId()];
+                    e.GetComponentBits().Clear(type.GetIndex());
+                    pooledComponents.Free((PooledComponent)pooled, type);
+                    componentsByType[index][e.GetId()] = null;
                     break;
             default:
-                    throw new ArtemisException.InvalidComponent("unknown component type %s",type.getTaxonomy().to_string());
+                    throw new ArtemisException.InvalidComponent("unknown component type %s",type.GetTaxonomy().to_string());
                 }
         }
     
@@ -161,11 +166,12 @@ namespace Artemis {
          *			the type of components to get
         * @return a bag containing all components of the given type
         */
-        public Bag<Component> getComponentsByType(ComponentType type) {
-            Bag<Component> components = componentsByType[type.getIndex()];
+        public Bag<Component> GetComponentsByType(ComponentType type) 
+        {
+            Bag<Component> components = componentsByType[type.GetIndex()];
             if(components == null) {
                 components = new Bag<Component>();
-                componentsByType.set(type.getIndex(), components);
+                componentsByType.set(type.GetIndex(), components);
             }
             return components;
         }
@@ -179,10 +185,11 @@ namespace Artemis {
         *			the type of component to get
         * @return the component of given type
         */
-        public Component getComponent(Entity e, ComponentType type) {
-            Bag<Component> components = componentsByType[type.getIndex()];
+        public Component GetComponent(Entity e, ComponentType type) 
+        {
+            Bag<Component> components = componentsByType[type.GetIndex()];
             if(components != null) {
-                return components[e.getId()];
+                return components[e.GetId()];
             }
             return null;
         }
@@ -196,11 +203,12 @@ namespace Artemis {
         *			a bag to be filled with components
         * @return the {@code fillBag}, filled with the entities components
         */
-        public Bag<Component> getComponentsFor(Entity e,  Bag<Component> fillBag) {
-            var componentBits = e.getComponentBits();
+        public Bag<Component> GetComponentsFor(Entity e,  Bag<Component> fillBag) 
+        {
+            var componentBits = e.GetComponentBits();
 
-            for (var i = componentBits.nextSetBit(0); i >= 0; i = componentBits.nextSetBit(i+1)) {
-                fillBag.add(componentsByType[i][e.getId()]);
+            for (var i = componentBits.NextSetBit(0); i >= 0; i = componentBits.NextSetBit(i+1)) {
+                fillBag.Add(componentsByType[i][e.GetId()]);
             }
             
             return fillBag;
@@ -208,19 +216,20 @@ namespace Artemis {
 
         
         
-        public override void deleted(Entity e) {
-            _deleted.add(e);
+        public override void Deleted(Entity e) 
+        {
+            deleted.Add(e);
         }
         
-        public void clean() {
-            if(_deleted.size() > 0) {
-                for(var i = 0; _deleted.size() > i; i++) {
-                    removeComponentsOfEntity(_deleted[i]);
+        public void Clean() 
+        {
+            if(deleted.Size() > 0) {
+                for(var i = 0; deleted.Size() > i; i++) {
+                    RemoveComponentsOfEntity(deleted[i]);
                 }
-                _deleted.clear();
+                deleted.Clear();
             }
         }
-        
     }
 }
   

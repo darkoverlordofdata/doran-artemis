@@ -32,7 +32,7 @@ namespace Artemis.Utils {
 		* @license MIT license
 		* @link http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/21963136#21963136
 		**/			
- 		public static string randomUUID() {
+ 		public static string RandomUUID() {
                 if (random == null) random = new Rand();
 				var d0 = random.next_double()*0xffffffff;
 				var d1 = random.next_double()*0xffffffff;

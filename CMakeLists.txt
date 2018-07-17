@@ -11,7 +11,7 @@ project ( artemis VERSION 0.0.1 )
 # C Sources: 
 
 # Vala Sources: 
-list ( APPEND SOURCE .lib/artemis/src/artemis.vala )
+# list ( APPEND SOURCE .lib/artemis/src/artemis.vala )
 list ( APPEND SOURCE .lib/artemis/src/exceptions.vala )
 list ( APPEND SOURCE .lib/artemis/src/Annotations/Mapper.vala )
 list ( APPEND SOURCE .lib/artemis/src/Annotations/EntityTemplate.vala )

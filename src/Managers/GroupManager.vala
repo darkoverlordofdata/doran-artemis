@@ -7,22 +7,22 @@
  * @author Arni Arent
  *
  */
-using Gee;
+using System.Collections.Generic;
 using Artemis.Utils;
 namespace Artemis.Managers {
 
     public class GroupManager : Manager {
 
-        private HashMap<string, Bag<Entity>> entitiesByGroup;
-        private HashMap<Entity, Bag<string>> groupsByEntity;
+        private Dictionary<string, Bag<Entity>> entitiesByGroup;
+        private Dictionary<Entity, Bag<string>> groupsByEntity;
 
         public GroupManager() {
             base();
-            entitiesByGroup = new HashMap<string, Bag<Entity>>();
-            groupsByEntity = new HashMap<Entity, Bag<string>>();
+            entitiesByGroup = new Dictionary<string, Bag<Entity>>();
+            groupsByEntity = new Dictionary<Entity, Bag<string>>();
         }
 
-        public override void initialize() {}
+        public override void Initialize() {}
 
         /**
          * Set the group of the entity.
@@ -30,20 +30,20 @@ namespace Artemis.Managers {
         * @param group group to add the entity into.
         * @param e entity to add into the group.
         */
-        public void add(Entity e, string group) {
+        public void Add(Entity e, string group) {
             var entities = entitiesByGroup.get(group);
             if (entities == null) {
                 entities = new Bag<Entity>();
                 entitiesByGroup[group] = entities;
             }
-            entities.add(e);
+            entities.Add(e);
 
             var groups = groupsByEntity.get(e);
             if (groups == null) {
                 groups = new Bag<string>();
                 groupsByEntity[e] = groups;
             }
-            groups.add(group);
+            groups.Add(group);
         }
 
         /**
@@ -51,28 +51,28 @@ namespace Artemis.Managers {
         * @param e
         * @param group
         */
-        public void remove(Entity e, string group) {
+        public void Remove(Entity e, string group) {
             var entities = entitiesByGroup.get(group);
             if (entities != null) {
-                entities.remove(e);
+                entities.Remove(e);
             }
 
             var groups = groupsByEntity.get(e);
             if (groups != null) {
-                groups.remove(group);
+                groups.Remove(group);
             }
         }
 
-        public void removeFromAllGroups(Entity e) {
+        public void RemoveFromAllGroups(Entity e) {
             var groups = groupsByEntity.get(e);
             if (groups != null) {
-                for(var i = 0, s = groups.size(); s > i; i++) {
+                for(var i = 0, s = groups.Size(); s > i; i++) {
                     var entities = entitiesByGroup.get(groups.get(i));
                     if(entities != null) {
-                        entities.remove(e);
+                        entities.Remove(e);
                     }
                 }
-                groups.clear();
+                groups.Clear();
             }
         }
 
@@ -81,7 +81,7 @@ namespace Artemis.Managers {
         * @param group name of the group.
         * @return read-only bag of entities belonging to the group.
         */
-        public ImmutableBag<Entity> getEntities(string group) {
+        public ImmutableBag<Entity> GetEntities(string group) {
             var entities = entitiesByGroup.get(group);
             if (entities == null) {
                 entities = new Bag<Entity>();
@@ -94,7 +94,7 @@ namespace Artemis.Managers {
          * @param e entity
         * @return the groups the entity belongs to, null if none.
         */
-        public ImmutableBag<string> getGroups(Entity e)  {
+        public ImmutableBag<string> GetGroups(Entity e)  {
             return groupsByEntity.get(e);
         }
 
@@ -103,8 +103,8 @@ namespace Artemis.Managers {
         * @param e the entity to check.
         * @return true if it is in any group, false if none.
         */
-        public bool isInAnyGroup(Entity e) {
-            return getGroups(e) != null;
+        public bool IsInAnyGroup(Entity e) {
+            return GetGroups(e) != null;
         }
 
         /**
@@ -113,11 +113,11 @@ namespace Artemis.Managers {
         * @param e the entity to check for.
         * @return true if the entity is in the supplied group, false if not.
         */
-        public bool isInGroup(Entity e, string group) {
+        public bool IsInGroup(Entity e, string group) {
             if (group != null) {
                 var groups = groupsByEntity.get(e);
-                for(var i = 0, s = groups.size(); s > i; i++) {
-                    var g = groups.get(i);
+                for(var i = 0, s = groups.Size(); s > i; i++) {
+                    var g = groups[i];
                     if (group == g) {
                         return true;
                     }
@@ -127,8 +127,8 @@ namespace Artemis.Managers {
         }
 
 
-        public override void deleted(Entity e) {
-            removeFromAllGroups(e);
+        public override void Deleted(Entity e) {
+            RemoveFromAllGroups(e);
         }
 
     }

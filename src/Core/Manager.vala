@@ -9,25 +9,25 @@ namespace Artemis {
     public abstract class Manager : Object, EntityObserver {
         protected World world;
         
-        public abstract void initialize();
+        public abstract void Initialize();
     
-        public void setWorld(World world) {
+        public void SetWorld(World world) {
             this.world = world;
         }
     
-        public World getWorld() {
+        public World GetWorld() {
             return world;
         }
         
-        public virtual void added(Entity e) {}
+        public virtual void Added(Entity e) {}
         
-        public virtual void changed(Entity e) {}
+        public virtual void Changed(Entity e) {}
         
-        public virtual void deleted(Entity e) {}
+        public virtual void Deleted(Entity e) {}
         
-        public virtual void disabled(Entity e) {}
+        public virtual void Disabled(Entity e) {}
         
-        public virtual void enabled(Entity e) {}
+        public virtual void Enabled(Entity e) {}
         
     }
 }
