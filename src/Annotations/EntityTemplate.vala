@@ -17,7 +17,12 @@ namespace Artemis.Annotations {
      */
     public class EntityTemplate : Object {
 
-        public static Dictionary<string, Type> entityTemplates = new Dictionary<string, Type>(); 
+        public static Dictionary<string, Type> entityTemplates;
+        
+        public static void Init()
+        {
+            entityTemplates = new Dictionary<string, Type>(); 
+        }
 
     }
 }

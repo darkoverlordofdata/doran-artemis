@@ -8,9 +8,9 @@
  * @author Arni Arent
  * 
  */
-using System.Collections.Generic;
 using Artemis.Utils;
 using Artemis.Annotations;
+using System.Collections.Generic;
 
 namespace Artemis {
     
@@ -37,10 +37,9 @@ namespace Artemis {
         private Dictionary<string, IEntityTemplate> entityTemplates;
 
         public World() {
-        
-            EntitySystem.BlackBoard = new Blackboard.BlackBoard();
 
-
+            Artemis.Initialize();
+            
             managers = new Dictionary<Type, Manager>();
             managersBag = new Bag<Manager>();
             
@@ -74,12 +73,20 @@ namespace Artemis {
              * 
              * Collect the entity templates
              */
+            print("init 1\n");
             entityTemplates = new Dictionary<string, IEntityTemplate>();
-            foreach (var entityName in EntityTemplate.entityTemplates.Keys) {
-                var Template = (Type)EntityTemplate.entityTemplates[entityName];
-                SetEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
+            print("init 2\n");
+            if (EntityTemplate.entityTemplates.Keys != null)
+            {
+                print("init 3\n");
+                foreach (var entityName in EntityTemplate.entityTemplates.Keys) {
+                    print("init 4\n");
+                    var Template = (Type)EntityTemplate.entityTemplates[entityName];
+                    SetEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
+                    print("init 5\n");
+                }
             }
-            
+            print("init 6\n");
             /** 
              * annotations.Mapper 
              *

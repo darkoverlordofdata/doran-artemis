@@ -9,7 +9,12 @@ namespace Artemis.Annotations {
      */
     public class Mapper : Object {
 
-        public static Dictionary<string, Object> declaredFields = new Dictionary<string, Object>(); 
+        public static Dictionary<string, Object> declaredFields;
+        
+        public static void Init()
+        {
+            declaredFields = new Dictionary<string, Object>(); 
+        }
 
     }
 }

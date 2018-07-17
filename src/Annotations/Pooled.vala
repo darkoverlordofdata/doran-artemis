@@ -14,7 +14,12 @@ namespace Artemis.Annotations {
      */
     public class Pooled : Object {
 
-        public static Dictionary<string, Object> pooledComponents = new Dictionary<string, Object>(); 
+        public static Dictionary<string, Object> pooledComponents;
+        
+        public static void Init()
+        {
+            pooledComponents = new Dictionary<string, Object>(); 
+        }
 
     }
 }

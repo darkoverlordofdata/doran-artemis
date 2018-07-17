@@ -6,15 +6,15 @@
  * @author Arni Arent
  *
  */
-using System.Collections.Generic;
 using Artemis.Utils;
 using Artemis.Blackboard;
+using System.Collections.Generic;
 
 namespace Artemis {
     
     public abstract class EntitySystem : Object, EntityObserver {
 
-        public static BlackBoard BlackBoard;// = new BlackBoard();
+        public static BlackBoard BlackBoard;
         private int systemIndex;
     
         public World World;
@@ -30,6 +30,11 @@ namespace Artemis {
         private bool passive;
     
         private bool dummy;
+
+        public static void Init()
+        {
+            EntitySystem.BlackBoard = new Blackboard.BlackBoard();
+        }
         
         /**
          * Creates an entity system that uses the specified aspect as a matcher against entities.
