@@ -1,18 +1,34 @@
-/**
- * The most raw entity system. It should not typically be used, but you can create your own
- * entity system handling by extending  It is recommended that you use the other provided
- * entity system implementations.
+/* ******************************************************************************
+ * Copyright 2018 darkoverlordofdata.
  * 
- * @author Arni Arent
- *
- */
-using Artemis.Utils;
-using Artemis.Blackboard;
-using System.Collections.Generic;
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+namespace Artemis 
+{ 
+    using Artemis.Utils;
+    using Artemis.Blackboard;
+    using System.Collections.Generic;
 
-namespace Artemis {
-    
-    public abstract class EntitySystem : Object, EntityObserver {
+    /**
+     * The most raw entity system. It should not typically be used, but you can create your own
+     * entity system handling by extending  It is recommended that you use the other provided
+     * entity system implementations.
+     * 
+     * @author Arni Arent
+     *
+     */
+    public abstract class EntitySystem : Object, EntityObserver 
+    {
 
         public static BlackBoard BlackBoard;
         private int systemIndex;

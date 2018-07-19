@@ -1,30 +1,45 @@
-/**
- * An Aspects is used by systems as a matcher against entities, to check if a system is
- * interested in an entity. Aspects define what sort of component types an entity must
- * possess, or not possess.
- *
- * This creates an aspect where an entity must possess A and B and C:
- * Aspect.getAspectForAll(A.class, B.class, C.class)
- *
- * This creates an aspect where an entity must possess A and B and C, but must not possess U or V.
- * Aspect.getAspectForAll(A.class, B.class, C.class).exclude(U.class, V.class)
- *
- * This creates an aspect where an entity must possess A and B and C, but must not possess U or V, but must possess one of X or Y or Z.
- * Aspect.getAspectForAll(A.class, B.class, C.class).exclude(U.class, V.class).one(X.class, Y.class, Z.class)
- *
- * You can create and compose aspects in many ways:
- * Aspect.getEmpty().one(X.class, Y.class, Z.class).all(A.class, B.class, C.class).exclude(U.class, V.class)
- * is the same as:
- * Aspect.getAspectForAll(A.class, B.class, C.class).exclude(U.class, V.class).one(X.class, Y.class, Z.class)
- *
- * @author Arni Arent
- *
- */
-using Artemis.Utils;
-
+/* ******************************************************************************
+ * Copyright 2018 darkoverlordofdata.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 namespace Artemis 
 {
 
+    using Artemis.Utils;
+
+    /**
+     * An Aspects is used by systems as a matcher against entities, to check if a system is
+     * interested in an entity. Aspects define what sort of component types an entity must
+     * possess, or not possess.
+     *
+     * This creates an aspect where an entity must possess A and B and C:
+     * Aspect.getAspectForAll(A.class, B.class, C.class)
+     *
+     * This creates an aspect where an entity must possess A and B and C, but must not possess U or V.
+     * Aspect.getAspectForAll(A.class, B.class, C.class).exclude(U.class, V.class)
+     *
+     * This creates an aspect where an entity must possess A and B and C, but must not possess U or V, but must possess one of X or Y or Z.
+     * Aspect.getAspectForAll(A.class, B.class, C.class).exclude(U.class, V.class).one(X.class, Y.class, Z.class)
+     *
+     * You can create and compose aspects in many ways:
+     * Aspect.getEmpty().one(X.class, Y.class, Z.class).all(A.class, B.class, C.class).exclude(U.class, V.class)
+     * is the same as:
+     * Aspect.getAspectForAll(A.class, B.class, C.class).exclude(U.class, V.class).one(X.class, Y.class, Z.class)
+     *
+     * @author Arni Arent
+     *
+     */
     public class Aspect : Object 
     {
         public static ComponentTypeFactory TypeFactory;

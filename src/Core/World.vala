@@ -1,22 +1,36 @@
-/**
- * The primary instance for the framework. It contains all the managers.
+/* ******************************************************************************
+ * Copyright 2018 darkoverlordofdata.
  * 
- * You must use this to create, delete and retrieve entities.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * It is also important to set the delta each game loop iteration, and initialize before game loop.
+ *   http://www.apache.org/licenses/LICENSE-2.0
  * 
- * @author Arni Arent
- * 
- */
-using Artemis.Utils;
-using Artemis.Annotations;
-using System.Collections.Generic;
-
-namespace Artemis {
-    
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+namespace Artemis 
+{
+    using Artemis.Utils;
+    using Artemis.Annotations;
+    using System.Collections.Generic;
 
     public delegate void Performer(EntityObserver observer, Entity e);
 
+    /**
+     * The primary instance for the framework. It contains all the managers.
+     * 
+     * You must use this to create, delete and retrieve entities.
+     * 
+     * It is also important to set the delta each game loop iteration, and initialize before game loop.
+     * 
+     * @author Arni Arent
+     * 
+     */
     public class World {
         private EntityManager em;
         private ComponentManager cm;
@@ -73,20 +87,14 @@ namespace Artemis {
              * 
              * Collect the entity templates
              */
-            print("init 1\n");
             entityTemplates = new Dictionary<string, IEntityTemplate>();
-            print("init 2\n");
             if (EntityTemplate.entityTemplates.Keys != null)
             {
-                print("init 3\n");
                 foreach (var entityName in EntityTemplate.entityTemplates.Keys) {
-                    print("init 4\n");
                     var Template = (Type)EntityTemplate.entityTemplates[entityName];
                     SetEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
-                    print("init 5\n");
                 }
             }
-            print("init 6\n");
             /** 
              * annotations.Mapper 
              *
