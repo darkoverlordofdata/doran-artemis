@@ -29,7 +29,6 @@ namespace Artemis
      */
     public abstract class EntitySystem : Object, EntityObserver 
     {
-
         public static BlackBoard BlackBoard;
         private int systemIndex;
     
@@ -42,7 +41,7 @@ namespace Artemis
         private BitSet allSet;
         private BitSet exclusionSet;
         private BitSet oneSet;
-    
+
         private bool passive;
     
         private bool dummy;
@@ -54,12 +53,13 @@ namespace Artemis
         
         /**
          * Creates an entity system that uses the specified aspect as a matcher against entities.
-        * @param aspect to match against entities
-        */
-        public EntitySystem(Aspect aspect) {
+         * @param aspect to match against entities
+         */
+        public EntitySystem(Aspect aspect) 
+        {
             actives = new Bag<Entity>();
             this.aspect = aspect;
-            systemIndex = SystemIndexManager.GetIndexFor(typeof(EntitySystem));
+            systemIndex = SystemIndexManager.GetIndexFor(get_type());
             allSet = aspect.GetAllSet();
             exclusionSet = aspect.GetExclusionSet();
             oneSet = aspect.GetOneSet();
@@ -69,7 +69,7 @@ namespace Artemis
         /**
          * Called before processing of entities begins. 
          */
-        protected void Begin() {}
+        protected virtual void Begin() {}
     
         public void Process() {
             if (CheckProcessing()) {
@@ -82,7 +82,7 @@ namespace Artemis
         /**
          * Called after the processing of entities ends.
          */
-        protected void End() {}
+        protected virtual void End() {}
         
         /**
          * Any implementing entity system must implement this method and the logic
@@ -102,30 +102,29 @@ namespace Artemis
     
         /**
          * Override to implement code that gets executed when systems are initialized.
-        */
-        public void Initialize() {}
+         */
+        public virtual void Initialize() {}
     
         /**
          * Called if the system has received a entity it is interested in, e.g. created or a component was added to it.
-        * @param e the entity that was added to this system.
-        */
-        public void Inserted(Entity e) {}
+         * @param e the entity that was added to this system.
+         */
+        public virtual void Inserted(Entity e) {}
     
         /**
          * Called if a entity was removed from this system, e.g. deleted or had one of it's components removed.
-        * @param e the entity that was removed from this system.
-        */
-        protected void Removed(Entity e) {}
+         * @param e the entity that was removed from this system.
+         */
+        protected virtual void Removed(Entity e) {}
     
         /**
          * Will Check if the entity is of interest to this system.
-        * @param e entity to Check
-        */
+         * @param e entity to Check
+         */
         protected void Check(Entity e) {
             if (dummy) {
                 return;
             }
-            
             var contains = e.GetSystemBits()[systemIndex];
             var interested = true; // possibly interested, let's try to prove it wrong.
             
@@ -134,13 +133,13 @@ namespace Artemis
             // Check if the entity possesses ALL of the components defined in the aspect.
             if (!allSet.IsEmpty()) {
                 for (var i = allSet.NextSetBit(0); i >= 0; i = allSet.NextSetBit(i+1)) {
-                    if (!componentBits.get(i)) {
+                    if (!componentBits[i]) {
                         interested = false;
                         break;
                     }
                 }
             }
-            
+
             // Check if the entity possesses ANY of the exclusion components, if it does then the system is not interested.
             if (!exclusionSet.IsEmpty() && interested) {
                 interested = !exclusionSet.Intersects(componentBits);
@@ -150,10 +149,13 @@ namespace Artemis
             if(!oneSet.IsEmpty()) {
                 interested = oneSet.Intersects(componentBits);
             }
-    
-            if (interested && !contains) {
+
+            if (interested && !contains) 
+            {
                 InsertToSystem(e);
-            } else if (!interested && contains) {
+            } 
+            else if (!interested && contains) 
+            {
                 RemoveFromSystem(e);
             }
         }
@@ -215,6 +217,14 @@ namespace Artemis
         public ImmutableBag<Entity> GetActive() {
             return actives;
         }
+        
+        public string to_string()
+        {
+            var s = new StringBuilder("%s (%s)\n".printf(get_type().name(), allSet.to_string()));
+            foreach (var e in actives)
+                s.append("  %s\n".printf(e.to_string()));
+            return s.str;
+        } 
     }
     /**
      * Used to generate a unique bit for each system.
@@ -222,9 +232,11 @@ namespace Artemis
      */
     internal class SystemIndexManager {
         private static int INDEX = 0;
-        private static Dictionary<Type, int> indices = new Dictionary<Type, int>();
+        private static Dictionary<Type, int> indices;
         
         public static int GetIndexFor(Type es) {
+
+            indices = indices ?? new Dictionary<Type, int>();
 
             var index = 0;
             

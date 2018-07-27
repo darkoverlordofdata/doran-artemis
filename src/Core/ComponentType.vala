@@ -36,9 +36,16 @@ namespace Artemis
         {
             this.index = ComponentType.INDEX++;
             this.type = type;
-            if (Pooled.pooledComponents[type.name()] == (Object)type) {
-                this.taxonomy = Taxonomy.POOLED;
-            } else {
+            if (Pooled.pooledComponents.ContainsKey(type.name()))
+            {
+                if (Pooled.pooledComponents[type.name()] == (Object)type) {
+                    this.taxonomy = Taxonomy.POOLED;
+                } else {
+                    this.taxonomy = Taxonomy.BASIC;
+                }
+            }
+            else
+            {
                 this.taxonomy = Taxonomy.BASIC;
             }
         }
@@ -60,7 +67,7 @@ namespace Artemis
         
         public string ToString() 
         {
-            return "ComponentType (%d)".printf(index);
+            return "ComponentType (%s - %d)".printf(type.name(), index);
         }
     }
 }

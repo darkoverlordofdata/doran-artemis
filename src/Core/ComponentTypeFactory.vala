@@ -66,7 +66,7 @@ namespace Artemis
                 componentTypes[c.name()] = type;
                 Types.set(index, type);
             }
-    
+
             return type;
         }
     

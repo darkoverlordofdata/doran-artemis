@@ -19,7 +19,7 @@ namespace Artemis
      *
      * Initialize the framework.
      */
-    public void Initialize()
+    public static void Initialize()
     {
         Artemis.EntitySystem.Init();
         Artemis.Annotations.Mapper.Init();

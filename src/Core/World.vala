@@ -20,7 +20,6 @@ namespace Artemis
     using System.Collections.Generic;
 
     public delegate void Performer(EntityObserver observer, Entity e);
-
     /**
      * The primary instance for the framework. It contains all the managers.
      * 
@@ -31,7 +30,8 @@ namespace Artemis
      * @author Arni Arent
      * 
      */
-    public class World {
+    public class World 
+    {
         private EntityManager em;
         private ComponentManager cm;
     
@@ -50,10 +50,8 @@ namespace Artemis
 
         private Dictionary<string, IEntityTemplate> entityTemplates;
 
-        public World() {
-
-            Artemis.Initialize();
-            
+        public World() 
+        {
             managers = new Dictionary<Type, Manager>();
             managersBag = new Bag<Manager>();
             
@@ -77,8 +75,10 @@ namespace Artemis
         /**
          * Makes sure all managers systems are initialized in the order they were added.
         */
-        public void Initialize() {
-            for (var i = 0; i < managersBag.Size(); i++) {
+        public void Initialize() 
+        {
+            for (var i = 0; i < managersBag.Size(); i++) 
+            {
                 managersBag[i].Initialize();
             }
             
@@ -90,7 +90,8 @@ namespace Artemis
             entityTemplates = new Dictionary<string, IEntityTemplate>();
             if (EntityTemplate.entityTemplates.Keys != null)
             {
-                foreach (var entityName in EntityTemplate.entityTemplates.Keys) {
+                foreach (var entityName in EntityTemplate.entityTemplates.Keys) 
+                {
                     var Template = (Type)EntityTemplate.entityTemplates[entityName];
                     SetEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
                 }
@@ -100,7 +101,8 @@ namespace Artemis
              *
              * Collect the component mappers
              */
-            for (var i = 0; i < systemsBag.Size(); i++) {
+            for (var i = 0; i < systemsBag.Size(); i++) 
+            {
                 /** Inject the component mappers into each system */
                 ComponentMapperInitHelper.Config(systemsBag[i], this);
                 systemsBag[i].Initialize();
@@ -114,7 +116,8 @@ namespace Artemis
          * 
          * @return entity manager.
          */
-        public EntityManager GetEntityManager() {
+        public EntityManager GetEntityManager() 
+        {
             return em;
         }
         
@@ -123,7 +126,8 @@ namespace Artemis
         * 
         * @return component manager.
         */
-        public ComponentManager GetComponentManager() {
+        public ComponentManager GetComponentManager() 
+        {
             return cm;
         }
         
@@ -136,7 +140,8 @@ namespace Artemis
         * 
         * @param manager to be added
         */
-        public Manager SetManager(Manager manager) {
+        public Manager SetManager(Manager manager) 
+        {
             managers[manager.get_type()] = manager;
             managersBag.Add(manager);
             manager.SetWorld(this);
@@ -151,7 +156,8 @@ namespace Artemis
         *            class type of the manager
         * @return the manager
         */
-        public T GetManager<T>(Type managerType) {
+        public T GetManager<T>(Type managerType) 
+        {
             return managers[managerType];
         }
         
@@ -159,7 +165,8 @@ namespace Artemis
          * Deletes the manager from this world.
         * @param manager to delete.
         */
-        public void DeleteManager(Manager manager) {
+        public void DeleteManager(Manager manager) 
+        {
             managers.Remove(manager.get_type());
             managersBag.Remove(manager);
         }
@@ -170,7 +177,8 @@ namespace Artemis
         * 
         * @return delta time since last game loop.
         */
-        public float GetDelta() {
+        public float GetDelta() 
+        {
             return delta;
         }
     
@@ -179,7 +187,8 @@ namespace Artemis
         * 
         * @param delta time since last game loop.
         */
-        public void SetDelta(float delta) {
+        public void SetDelta(float delta) 
+        {
             delta = delta;
         }
     
@@ -189,7 +198,8 @@ namespace Artemis
         * 
         * @param e entity
         */
-        public void AddEntity(Entity e) {
+        public void AddEntity(Entity e) 
+        {
             _added.Add(e);
         }
         
@@ -200,7 +210,8 @@ namespace Artemis
         * 
         * @param e entity
         */
-        public void ChangedEntity(Entity e) {
+        public void ChangedEntity(Entity e) 
+        {
             _changed.Add(e);
         }
         
@@ -209,8 +220,10 @@ namespace Artemis
         * 
         * @param e entity
         */
-        public void DeleteEntity(Entity e) {
-            if (!_deleted.Contains(e)) {
+        public void DeleteEntity(Entity e) 
+        {
+            if (!_deleted.Contains(e)) 
+            {
                 _deleted.Add(e);
             }
         }
@@ -219,7 +232,8 @@ namespace Artemis
          * (Re)enable the entity in the world, after it having being disabled.
         * Won't do anything unless it was already disabled.
         */
-        public void Enable(Entity e) {
+        public void Enable(Entity e) 
+        {
             _enable.Add(e);
         }
     
@@ -227,7 +241,8 @@ namespace Artemis
          * Disable the entity from being processed. Won't delete it, it will
         * continue to exist but won't get processed.
         */
-        public void Disable(Entity e) {
+        public void Disable(Entity e) 
+        {
             _disable.Add(e);
         }
     
@@ -239,7 +254,8 @@ namespace Artemis
         * @param name optional name for debugging
         * @return entity
         */
-        public Entity CreateEntity(string name="") {
+        public Entity CreateEntity(string name="") 
+        {
             return em.CreateEntityInstance(name);
         }
     
@@ -249,7 +265,8 @@ namespace Artemis
         * @param entityId
         * @return entity
         */
-        public Entity GetEntity(int entityId) {
+        public Entity GetEntity(int entityId) 
+        {
             return em.GetEntity(entityId);
         }
     
@@ -259,7 +276,8 @@ namespace Artemis
         * 
         * @return all entity systems in world.
         */
-        public ImmutableBag<EntitySystem> GetSystems() {
+        public ImmutableBag<EntitySystem> GetSystems() 
+        {
             return systemsBag;
         }
     
@@ -282,7 +300,8 @@ namespace Artemis
         */
         //	public <T extends EntitySystem> T setSystem(T system, boolean passive) {
 
-        public T SetSystem<T>(EntitySystem system, bool passive=false) {
+        public T SetSystem<T>(EntitySystem system, bool passive=false) 
+        {
             system.SetWorld(this);
             system.SetPassive(passive);
             
@@ -296,19 +315,24 @@ namespace Artemis
          * Removed the specified system from the world.
         * @param system to be deleted from world.
         */
-        public void DeleteSystem(EntitySystem system) {
+        public void DeleteSystem(EntitySystem system) 
+        {
             systems.Remove(system.get_type());
             systemsBag.Remove(system);
         }
         
-        private void NotifySystems(Performer perform, Entity e) {
-            for (var i = 0, s=systemsBag.Size(); s > i; i++) {
+        private void NotifySystems(Performer perform, Entity e) 
+        {
+            for (var i = 0, s=systemsBag.Size(); s > i; i++) 
+            {
                 perform(systemsBag[i], e);
             }
         }
     
-        private void NotifyManagers(Performer perform, Entity e) {
-            for (var a = 0, s = managersBag.Size(); s > a; a++) {
+        private void NotifyManagers(Performer perform, Entity e) 
+        {
+            for (var a = 0, s = managersBag.Size(); s > a; a++) 
+            {
                 perform(managersBag[a], e);
             }
         }
@@ -319,7 +343,8 @@ namespace Artemis
         * @param type type of system.
         * @return instance of the system in this world.
         */
-        public EntitySystem GetSystem(Type type) {
+        public EntitySystem GetSystem(Type type) 
+        {
             return systems[type];
         }
 
@@ -328,9 +353,12 @@ namespace Artemis
         * @param entities
         * @param performer
         */
-        private void Check(Bag<Entity> entities, Performer perform) {
-            if (!entities.IsEmpty()) {
-                for (var i = 0, s = entities.Size(); s > i; i++) {
+        private void Check(Bag<Entity> entities, Performer perform) 
+        {
+            if (!entities.IsEmpty()) 
+            {
+                for (var i = 0, s = entities.Size(); s > i; i++) 
+                {
                     var e = entities[i];
                     NotifyManagers(perform, e);
                     NotifySystems(perform, e);
@@ -338,13 +366,12 @@ namespace Artemis
                 entities.Clear();
             }
         }
-    
-        
+
         /**
          * Process all non-passive systems.
         */
-        public void Process() {
-
+        public void Process() 
+        {
             Check(_added,   (observer, e) => observer.Added(e));
             Check(_changed, (observer, e) => observer.Changed(e));
             Check(_disable, (observer, e) => observer.Disabled(e));
@@ -352,10 +379,12 @@ namespace Artemis
             Check(_deleted, (observer, e) => observer.Deleted(e));
             
             cm.Clean();
-            
-            for (var i = 0; systemsBag.Size() > i; i++) {
+
+            for (var i = 0; systemsBag.Size() > i; i++) 
+            {
                 var system = systemsBag[i];
-                if(!system.IsPassive()) {
+                if(!system.IsPassive()) 
+                {
                     system.Process();
                 }
             }
@@ -368,8 +397,10 @@ namespace Artemis
         * @param type of component to get mapper for.
         * @return mapper for specified component type.
         */
-        public ComponentMapper<T> GetMapper<T>(Type type) {
-            return ComponentMapper.GetFor<T>(type, this);
+        // public ComponentMapper<T> GetMapper<T>(Type type) 
+        public ComponentMapper<T> GetMapper<T>() 
+        {
+            return ComponentMapper.GetFor<T>(typeof(T), this);
         }
 
 
@@ -379,7 +410,8 @@ namespace Artemis
          * @param entityTag
          * @param entityTemplate
          */
-        public void SetEntityTemplate(string entityTag, IEntityTemplate entityTemplate) {
+        public void SetEntityTemplate(string entityTag, IEntityTemplate entityTemplate) 
+        {
             entityTemplates[entityTag] = entityTemplate;
         }
         /**
@@ -390,16 +422,20 @@ namespace Artemis
          * @returns {Entity}
          * EntityTemplate
          */
-        public Entity CreateEntityFromTemplate(string name, ...) {
-            return entityTemplates[name].BuildEntity(CreateEntity(), this);
+        public Entity CreateEntityFromTemplate(string name, ...) 
+        {
+            var list = va_list();
+            return entityTemplates[name].BuildEntity(CreateEntity(name), this, list);
         }
 
     }
         
 
-    internal class ComponentMapperInitHelper {
+    internal class ComponentMapperInitHelper 
+    {
 
-        public static void Config(EntitySystem target, World world) {
+        public static void Config(EntitySystem target, World world) 
+        {
 
             /**
              * find the Mapper.declaredFields for this system

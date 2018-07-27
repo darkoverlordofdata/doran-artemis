@@ -43,11 +43,9 @@ namespace Artemis
     
             switch (type.GetTaxonomy()) {
             case Taxonomy.BASIC:
-                //console.log('create BASIC');
                 component = NewInstance<T>(componentClass);
                 break;
             case Taxonomy.POOLED:
-                //console.log('create POOLED');
                 ReclaimPooled(owner, type);
                 /**
                  * YUK! <T> is not working here.
@@ -99,12 +97,10 @@ namespace Artemis
                 switch(TypeFactory.GetTaxonomy(i)) {
 
                 case Taxonomy.BASIC:
-                    //console.log('remove BASIC');
                     componentsByType[i].set(e.GetId(), null);
                     break;
 
                 case Taxonomy.POOLED:
-                    //console.log('remove POOLED');
                     var pooled = componentsByType[i][e.GetId()];
                     pooledComponents.FreeByIndex((PooledComponent)pooled, i);
                     componentsByType[i].set(e.GetId(), null);
@@ -139,14 +135,14 @@ namespace Artemis
             Bag<Component> components = componentsByType[type.GetIndex()];
             if(components == null) {
                 components = new Bag<Component>();
-                componentsByType.set(type.GetIndex(), components);
+                componentsByType[type.GetIndex()] = components;
             }
             
-            components.set(e.GetId(), component);
-
+            components[e.GetId()] = component;
             e.GetComponentBits()[type.GetIndex()] = true;
         }
-    
+
+
         /**
          * Removes the component of given type from the entity.
          *

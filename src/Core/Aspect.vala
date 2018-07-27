@@ -96,9 +96,9 @@ namespace Artemis
         {
             foreach (var t in types) 
             {
-                allSet[Aspect.TypeFactory.GetIndexFor(t)] = true;
+                var index = Aspect.TypeFactory.GetIndexFor(t);
+                allSet[index] = true;
             }
-    
             return this;
         }
         

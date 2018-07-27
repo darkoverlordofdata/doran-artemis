@@ -31,7 +31,7 @@ namespace Artemis.Utils
         /** The amount of elements contained in bag. */
         protected int length = 0;
         /** The iterator, it is only created once and reused when required. */
-        //  private BagIterator it;
+         private BagIterator it;
   
         /**
          * Constructs an empty Bag with the specified initial capacity.
@@ -45,6 +45,11 @@ namespace Artemis.Utils
             data = new E[capacity];
         }
     
+        public BagIterator<E> iterator()
+        {
+            it = new BagIterator<E>(this);
+            return it;
+        }
         /**
          * Removes the element at the specified position in this Bag. does this by
          * overwriting it was last element then removing last element
@@ -189,7 +194,7 @@ namespace Artemis.Utils
             }
             return data[index];
         }
-    
+
         /**
          * Returns the element at the specified position in Bag. This method
          * ensures that the bag grows if the requested index is outside the bounds
@@ -365,6 +370,31 @@ namespace Artemis.Utils
             return data;
         }
         
+        public class BagIterator<E> : Object
+        {
+            public Bag<E> bag;
+            public int index;
+            public BagIterator(Bag bag)
+            {
+                index = -1;
+                this.bag = bag;
+            }
+            public E? get()
+            {
+                return bag.data[index];
+            }
+            public bool has_next()
+            {
+                return index+1 < bag.length;
+            }
+            public bool next()
+            {
+                if (index < bag.length)
+                    index++;
+                return index < bag.length;
+            }
+
+        }
     }
 }
   

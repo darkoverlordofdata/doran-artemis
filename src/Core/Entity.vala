@@ -37,6 +37,7 @@ namespace Artemis
         private EntityManager entityManager;
         private ComponentManager componentManager;
         
+        public string Name { get { return name; } }
         public Entity(World world, int id, string name = "") 
         {
             this.world = world;
@@ -143,11 +144,10 @@ namespace Artemis
             var tf = this.world.GetComponentManager().TypeFactory;
             var componentType = tf.GetTypeFor(type);
             componentBits[componentType.GetIndex()] = true;
-  
             //  var c1 = createComponent(component.get_type());
             //  type = this.GetTypeFor(c1.get_type());
     
-            //  this.componentManager.addComponent(this, type, c1);
+            componentManager.AddComponent(this, componentType, component);
             return this;
         }
   
@@ -260,6 +260,16 @@ namespace Artemis
             return componentManager.GetComponentsFor(this, fillBag);
         }
       
+        public string to_string()
+        {
+            //componentBits
+
+            var s = new StringBuilder("%s (%d)(%s):".printf(name, id, componentBits.to_string()));
+            foreach (var cc in GetComponents(new Bag<Component>()))
+                s.append("%s,".printf(cc.get_type().name()));
+
+            return s.str;
+        }
         /**
          * Refresh all changes to components for this entity. After adding or
         * removing components, you must call this method. It will update all

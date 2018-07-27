@@ -21,7 +21,7 @@ namespace Artemis.Utils
      * consists of 32 bits, requiring 5 address bits.
      */
     const int ADDRESS_BITS_PER_WORD = 5;
-    const int BITS_PER_WORD = 1 << ADDRESS_BITS_PER_WORD; // 32
+    public const int BITS_PER_WORD = 1 << ADDRESS_BITS_PER_WORD; // 32
     const int64 WORD_MASK = 0xffffffff;
   
     /**
@@ -29,31 +29,37 @@ namespace Artemis.Utils
      */
     private uint numberOfTrailingZeros(uint i) 
     {
-        if (i == 0) return 64;
+        if (i == 0) return 32;
         uint x = i;
         uint y;
-        uint n = 63;
-        y = x << 32; if (y != 0) { n -= 32; x = y; }
+        uint n = 31;
         y = x << 16; if (y != 0) { n -= 16; x = y; }
         y = x <<  8; if (y != 0) { n -=  8; x = y; }
         y = x <<  4; if (y != 0) { n -=  4; x = y; }
         y = x <<  2; if (y != 0) { n -=  2; x = y; }
-        return (n - ((x << 1) >> 63));
+        return (n - ((x << 1) >> 31));
     }
-  
+
     public class BitSet : Object 
     {
 
         private uint[] words;
 
-        public BitSet(int nbits=0) {
-            if (nbits < 0) {
+        public BitSet(int nbits=0) 
+        {
+            if (nbits < 0) 
+            {
                 throw new Exception.RangeError("Negative Array Size: [%d]", nbits);
-            } else if (nbits == 0) {
-                this.words = new uint[0];
-            } else {
-                var words = this.words = new uint[(((nbits-1) >> ADDRESS_BITS_PER_WORD)+1)];
-                for (var i=0, l = words.length; i<l; i++) {
+            } 
+            else if (nbits == 0) 
+            {
+                words = new uint[0];
+            } 
+            else 
+            {
+                words = new uint[(((nbits-1) >> ADDRESS_BITS_PER_WORD)+1)];
+                for (var i=0, l = words.length; i<l; i++) 
+                {
                     words[i] = 0;
                 }
             }
@@ -62,11 +68,11 @@ namespace Artemis.Utils
         public int NextSetBit(int fromIndex) 
         {
             var u = fromIndex >> ADDRESS_BITS_PER_WORD;
-            var words = this.words;
             var wordsInUse = words.length;
 
             var word = words[u] & (WORD_MASK << fromIndex);
-            while (true) {
+            while (true) 
+            {
                 if (word != 0)
                     return (int)((u * BITS_PER_WORD) + numberOfTrailingZeros(word));
                 if (++u == wordsInUse)
@@ -77,7 +83,6 @@ namespace Artemis.Utils
 
         public bool Intersects(BitSet set) 
         {
-            var words = this.words;
             var wordsInUse = words.length;
 
             for (var i = int.min(wordsInUse, set.words.length) - 1; i >= 0; i--)
@@ -89,26 +94,34 @@ namespace Artemis.Utils
 
         public bool IsEmpty() 
         {
-            return this.words.length == 0;
+            return words.length == 0;
         }
 
         public void set(int bitIndex, bool value) 
         {
             var wordIndex = bitIndex >> ADDRESS_BITS_PER_WORD;
-            var words = this.words;
             var wordsInUse = words.length;
             var wordsRequired = wordIndex+1;
 
-            if (wordsInUse < wordsRequired) {
+            if (wordIndex >= words.length) 
+            {
+                words.resize(wordIndex+1);
+            }
+            if (wordsInUse < wordsRequired) 
+            {
                 words.length = int.max(2 * wordsInUse, wordsRequired);
-                for (var i=wordsInUse, l=words.length; i<l; i++) {
+                for (var i=wordsInUse, l=words.length; i<l; i++) 
+                {
                     words[i] = 0;
                 }
             }
 
-            if (value) {
+            if (value) 
+            {
                 words[wordIndex] |= (1 << bitIndex);
-            } else {
+            } 
+            else 
+            {
                 words[wordIndex] &= ~(1 << bitIndex);
             }
         }
@@ -117,7 +130,6 @@ namespace Artemis.Utils
         public bool get(int bitIndex) 
         {
             var wordIndex = bitIndex >> ADDRESS_BITS_PER_WORD;
-            var words = this.words;
             var wordsInUse = words.length;
 
             return (wordIndex < wordsInUse) && ((words[wordIndex] & (1 << bitIndex)) != 0);
@@ -126,17 +138,28 @@ namespace Artemis.Utils
 
         public void Clear(int bitIndex=-1)  
         {
-            if (bitIndex == -1) {
-                var words = this.words;
+            if (bitIndex == -1) 
+            {
                 var wordsInUse = words.length;
-                while (wordsInUse>0) {
+                while (wordsInUse>0) 
+                {
                     words[--wordsInUse] = 0;
                 }
                 return;
             }
 
             var wordIndex = bitIndex >> ADDRESS_BITS_PER_WORD;
-            this.words[wordIndex] &= ~(1 << bitIndex);
+            words[wordIndex] &= ~(1 << bitIndex);
+        }
+
+        public string to_string()
+        {
+            string[] s = new string[words.length];
+            for (var i=0; i<words.length; i++)
+            {
+                s[i] = "0x%08x".printf(words[i]);
+            }
+            return string.joinv("|", s);
         }
 
     }
