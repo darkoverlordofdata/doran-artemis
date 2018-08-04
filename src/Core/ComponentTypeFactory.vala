@@ -57,7 +57,7 @@ namespace Artemis
             //  if ('number' == typeof c) {
             //  return this.types[parseInt(c)];
             //  }
-    
+
             var type = componentTypes[c.name()];
     
             if (type == null) {
@@ -66,7 +66,6 @@ namespace Artemis
                 componentTypes[c.name()] = type;
                 Types.set(index, type);
             }
-
             return type;
         }
     

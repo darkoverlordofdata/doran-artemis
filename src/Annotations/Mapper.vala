@@ -26,13 +26,23 @@ namespace Artemis.Annotations
     public class Mapper : Object 
     {
 
-        public static Dictionary<string, Object> declaredFields;
-        
+        public static Dictionary<string, Type> declaredFields;
+
+        public static Dictionary<string, Type> Fields
+        {
+            get 
+            {
+                if (declaredFields == null)
+                    declaredFields = new Dictionary<string, Type>(); 
+                return declaredFields;
+            }
+        }
+
         public static void Init()
         {
-            declaredFields = new Dictionary<string, Object>(); 
+            declaredFields = new Dictionary<string, Type>(); 
         }
-        public static void Add(string name, Object component)
+        public static void Register(string name, Type component)
         {
             declaredFields[name] = component;
         }

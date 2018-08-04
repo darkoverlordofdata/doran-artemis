@@ -56,8 +56,8 @@ namespace Artemis.Systems
         }
 
         protected override void ProcessEntities(ImmutableBag<Entity> entities) {
-            for (var i = 0, s = entities.Size(); s > i; i++) {
-                var entity = entities[i];
+            foreach (var entity in entities)
+            {
                 ProcessDelta(entity, acc);
                 var remaining = GetRemainingDelay(entity);
                 if (remaining <= 0) {
@@ -69,7 +69,7 @@ namespace Artemis.Systems
             Stop();
         }
 
-        public void Inserted(Entity e) {
+        public override void Inserted(Entity e) {
             var delay = GetRemainingDelay(e);
             if (delay > 0) {
                 OfferDelay(delay);
@@ -86,7 +86,8 @@ namespace Artemis.Systems
 
         protected override bool CheckProcessing() {
             if (running) {
-                if ((acc += World.GetDelta()) >= delay) {
+                acc += World.GetDelta();
+                if (acc >= delay) {
                     return true;
                 }
             }
@@ -122,8 +123,8 @@ namespace Artemis.Systems
         /**
          * Restarts the system only if the delay offered is shorter than the
         * time that the system is currently scheduled to execute at.
-        *
         * If the system is already stopped (not running) then the offered
+        *
         * delay will be used to restart the system with no matter its value.
         *
         * If the system is already counting down, and the offered delay is
@@ -156,7 +157,7 @@ namespace Artemis.Systems
         *
         * @return time when system will run at.
         */
-        public float GetRemainingTimeUntilProcessing() {
+        public virtual float GetRemainingTimeUntilProcessing() {
             if(running) {
                 return delay-acc;
             }

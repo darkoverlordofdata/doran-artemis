@@ -149,6 +149,8 @@ namespace Artemis.Utils
             }
 
             var wordIndex = bitIndex >> ADDRESS_BITS_PER_WORD;
+            if (words.length <= wordIndex)
+                words.resize(wordIndex+1);
             words[wordIndex] &= ~(1 << bitIndex);
         }
 

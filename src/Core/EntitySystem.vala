@@ -29,7 +29,7 @@ namespace Artemis
      */
     public abstract class EntitySystem : Object, EntityObserver 
     {
-        public static BlackBoard BlackBoard;
+        public static BlackBoard blackboard;
         private int systemIndex;
     
         public World World;
@@ -46,11 +46,16 @@ namespace Artemis
     
         private bool dummy;
 
-        public static void Init()
+        public static Blackboard.BlackBoard BlackBoard
         {
-            EntitySystem.BlackBoard = new Blackboard.BlackBoard();
+            get 
+            {
+                if (blackboard == null)
+                    blackboard = new Blackboard.BlackBoard(); 
+                return blackboard;
+            }
         }
-        
+
         /**
          * Creates an entity system that uses the specified aspect as a matcher against entities.
          * @param aspect to match against entities
@@ -125,10 +130,10 @@ namespace Artemis
             if (dummy) {
                 return;
             }
-            var contains = e.GetSystemBits()[systemIndex];
+            var contains = e.SystemBits[systemIndex];
             var interested = true; // possibly interested, let's try to prove it wrong.
             
-            var componentBits = e.GetComponentBits();
+            var componentBits = e.ComponentBits;
     
             // Check if the entity possesses ALL of the components defined in the aspect.
             if (!allSet.IsEmpty()) {
@@ -162,37 +167,32 @@ namespace Artemis
     
         private void RemoveFromSystem(Entity e) {
             actives.Remove(e);
-            e.GetSystemBits().Clear(systemIndex);
+            e.SystemBits.Clear(systemIndex);
             Removed(e);
         }
     
         private void InsertToSystem(Entity e) {
             actives.Add(e);
-            e.GetSystemBits()[systemIndex] = true;
+            e.SystemBits[systemIndex] = true;
             Inserted(e);
         }
-        
-        
         
         public void Added(Entity e) {
             Check(e);
         }
         
-        
         public void Changed(Entity e) {
             Check(e);
         }
         
-        
         public void Deleted(Entity e) {
-            if(e.GetSystemBits().get(systemIndex)) {
+            if(e.SystemBits[systemIndex]) {
                 RemoveFromSystem(e);
             }
         }
         
-        
         public void Disabled(Entity e) {
-            if(e.GetSystemBits().get(systemIndex)) {
+            if(e.SystemBits[systemIndex]) {
                 RemoveFromSystem(e);
             }
         }
@@ -200,7 +200,6 @@ namespace Artemis
         public void Enabled(Entity e) {
             Check(e);
         }
-        
     
         public void SetWorld(World world) {
             this.World = world;
@@ -230,19 +229,23 @@ namespace Artemis
      * Used to generate a unique bit for each system.
      * Only used internally in EntitySystem.
      */
-    internal class SystemIndexManager {
+    private class SystemIndexManager 
+    {
         private static int INDEX = 0;
         private static Dictionary<Type, int> indices;
         
-        public static int GetIndexFor(Type es) {
-
+        public static int GetIndexFor(Type es) 
+        {
             indices = indices ?? new Dictionary<Type, int>();
 
             var index = 0;
             
-            if (indices.ContainsKey(es)) {
+            if (indices.ContainsKey(es)) 
+            {
                 index = indices[es];
-            } else {
+            } 
+            else 
+            {
                 index = INDEX++;
                 indices[es] = index;
             }

@@ -31,13 +31,23 @@ namespace Artemis.Annotations
     public class Pooled : Object 
     {
 
-        public static Dictionary<string, Object> pooledComponents;
+        public static Dictionary<string, Type> pooledComponents;
         
+        public static Dictionary<string, Type> Components
+        {
+            get 
+            {
+                if (pooledComponents == null)
+                    pooledComponents = new Dictionary<string, Type>(); 
+                return pooledComponents;
+            }
+        }
+
         public static void Init()
         {
-            pooledComponents = new Dictionary<string, Object>(); 
+            pooledComponents = new Dictionary<string, Type>(); 
         }
-        public static void Add(string name, Object component)
+        public static void Register(string name, Type component)
         {
             pooledComponents[name] = component;
         }

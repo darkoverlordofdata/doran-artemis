@@ -35,7 +35,7 @@ namespace Artemis
         private EntityManager em;
         private ComponentManager cm;
     
-        private float delta;
+        public float delta;
         private Bag<Entity> _added;
         private Bag<Entity> _changed;
         private Bag<Entity> _deleted;
@@ -77,11 +77,9 @@ namespace Artemis
         */
         public void Initialize() 
         {
-            for (var i = 0; i < managersBag.Size(); i++) 
-            {
-                managersBag[i].Initialize();
-            }
-            
+            foreach (var manager in managersBag)
+                manager.Initialize();
+
             /** 
              * annotaions.EntityTemplate 
              * 
@@ -101,11 +99,11 @@ namespace Artemis
              *
              * Collect the component mappers
              */
-            for (var i = 0; i < systemsBag.Size(); i++) 
+            foreach (var system in systemsBag)
             {
                 /** Inject the component mappers into each system */
-                ComponentMapperInitHelper.Config(systemsBag[i], this);
-                systemsBag[i].Initialize();
+                ComponentMapperInitHelper.Config(system, this);
+                system.Initialize();
             }
         }
         
@@ -156,9 +154,10 @@ namespace Artemis
         *            class type of the manager
         * @return the manager
         */
-        public T GetManager<T>(Type managerType) 
+        // public T GetManager<T>(Type managerType) 
+        public T GetManager<T>() 
         {
-            return managers[managerType];
+            return managers[typeof(T)];
         }
         
         /**
@@ -189,7 +188,7 @@ namespace Artemis
         */
         public void SetDelta(float delta) 
         {
-            delta = delta;
+            this.delta = delta;
         }
     
     
@@ -323,18 +322,14 @@ namespace Artemis
         
         private void NotifySystems(Performer perform, Entity e) 
         {
-            for (var i = 0, s=systemsBag.Size(); s > i; i++) 
-            {
-                perform(systemsBag[i], e);
-            }
+            foreach (var system in systemsBag)
+                perform(system, e);
         }
     
         private void NotifyManagers(Performer perform, Entity e) 
         {
-            for (var a = 0, s = managersBag.Size(); s > a; a++) 
-            {
-                perform(managersBag[a], e);
-            }
+            foreach (var manager in managersBag)
+                perform(manager, e);
         }
         
         /**
@@ -357,9 +352,8 @@ namespace Artemis
         {
             if (!entities.IsEmpty()) 
             {
-                for (var i = 0, s = entities.Size(); s > i; i++) 
+                foreach (var e in entities)
                 {
-                    var e = entities[i];
                     NotifyManagers(perform, e);
                     NotifySystems(perform, e);
                 }
@@ -380,14 +374,9 @@ namespace Artemis
             
             cm.Clean();
 
-            for (var i = 0; systemsBag.Size() > i; i++) 
-            {
-                var system = systemsBag[i];
+            foreach (var system in systemsBag)
                 if(!system.IsPassive()) 
-                {
                     system.Process();
-                }
-            }
         }
         
     

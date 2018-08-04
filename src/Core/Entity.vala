@@ -26,7 +26,7 @@ namespace Artemis
     */
     public class Entity : Object 
     {
-        private string uuid;
+        // private string uuid;
         private string name;
     
         private int id;
@@ -37,7 +37,12 @@ namespace Artemis
         private EntityManager entityManager;
         private ComponentManager componentManager;
         
+        public int Id { get { return id; } }
         public string Name { get { return name; } }
+        public BitSet ComponentBits { get { return componentBits; } }
+        public BitSet SystemBits { get { return systemBits; } }
+
+
         public Entity(World world, int id, string name = "") 
         {
             this.world = world;
@@ -58,28 +63,28 @@ namespace Artemis
         * 
         * @return id of the entity.
         */
-        public int GetId() 
-        {
-            return id;
-        }
+        // public int GetId() 
+        // {
+        //     return id;
+        // }
       
         /**
          * Returns a BitSet instance containing bits of the components the entity possesses.
         * @return
         */
-        public BitSet GetComponentBits() 
-        {
-            return componentBits;
-        }
+        // public BitSet GetComponentBits() 
+        // {
+        //     return componentBits;
+        // }
         
         /**
          * Returns a BitSet instance containing bits of the components the entity possesses.
         * @return
         */
-        public BitSet GetSystemBits() 
-        {
-            return systemBits;
-        }
+        // public BitSet GetSystemBits() 
+        // {
+        //     return systemBits;
+        // }
     
         /**
          * Make entity ready for re-use.
@@ -89,7 +94,7 @@ namespace Artemis
         {
             systemBits.Clear();
             componentBits.Clear();
-            uuid = UUID.RandomUUID();
+            // uuid = UUID.RandomUUID();
         }
       
           
@@ -320,10 +325,10 @@ namespace Artemis
         * This UUID is unique per entity (re-used entities get a new UUID).
         * @return uuid instance for this entity.
         */
-        public string GetUuid() 
-        {
-            return uuid;
-        }
+        // public string GetUuid() 
+        // {
+        //     return uuid;
+        // }
       
         /**
          * Returns the world this entity belongs to.

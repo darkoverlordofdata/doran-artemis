@@ -52,26 +52,26 @@ namespace Artemis
 		public override void Added(Entity e) {
 			_active++;
 			_added++;
-			entities.set(e.GetId(), e);
+			entities.set(e.Id, e);
 		}
 		
 		
 		public override void Enabled(Entity e) {
-			_disabled.Clear(e.GetId());
+			_disabled.Clear(e.Id);
 		}
 		
 		
 		public override void Disabled(Entity e) {
-			_disabled[e.GetId()] = true;
+			_disabled[e.Id] = true;
 		}
 		
 		
 		public override void Deleted(Entity e) {
-			entities.set(e.GetId(), null);
+			entities.set(e.Id, null);
 			
-			_disabled.Clear(e.GetId());
+			_disabled.Clear(e.Id);
 			
-			identifierPool.CheckIn(e.GetId());
+			identifierPool.CheckIn(e.Id);
 			
 			_active--;
 			_deleted++;

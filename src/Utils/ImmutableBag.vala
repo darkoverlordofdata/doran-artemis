@@ -30,6 +30,7 @@ namespace Artemis.Utils
     public interface ImmutableBag<E> : Object 
     {
         //  public interface ImmutableBag<E> : Iterable<E> {
+        public abstract Bag.BagIterator<E> iterator();
 
 
         /**

@@ -15,15 +15,53 @@
  ******************************************************************************/
 namespace Artemis 
 {
-    /**
-     *
-     * Initialize the framework.
-     */
-    public static void Initialize()
+    // using Artemis.Annotations;
+    using System.Collections.Generic;
+    // public class Ecs : Object
+    namespace Annotations
     {
-        Artemis.EntitySystem.Init();
-        Artemis.Annotations.Mapper.Init();
-        Artemis.Annotations.Pooled.Init();
-        Artemis.Annotations.EntityTemplate.Init();
+        public static void Register<G>(Dictionary<string?,Type> dict, ...)
+        {
+            var p = va_list();
+            while (true)
+            {
+                var name = p.arg<string?>();
+                if (name == null) break;
+
+                var object = p.arg<Type>();
+                if (!object.is_a(typeof(G)))
+                    throw new Artemis.Exception.InvalidType("%s Not Found".printf(typeof(G).name()));
+                dict[name] = object;  
+            }
+        }        
+        public static G[] ArrayOf<G>(G elem, ...)
+        {
+            var p = va_list();
+            G[] a = { elem };
+
+            while (true)
+            {
+                var object = p.arg<G?>();
+                if (object == null) break;
+
+                a.resize(a.length+1);
+                a[a.length-1] = object;
+            }
+            return a;
+        } 
+        public static void Registerz<G>(Dictionary<string?,Type> dict, ...)
+        {
+            // var p = va_list();
+            // while (true)
+            // {
+            //     var name = p.arg<string?>();
+            //     if (name == null) break;
+
+            //     var object = p.arg<Type>();
+            //     if (!object.is_a(typeof(G)))
+            //         throw new Artemis.Exception.InvalidType("%s Not Found".printf(typeof(G).name()));
+            //     dict[name] = object;  
+            // }
+        }        
     }
 }

@@ -79,21 +79,22 @@ namespace Artemis.Utils
         public bool Remove(E e) 
         {
             E e2;
-            var size = length;
-    
-            for (var i = 0; i < size; i++) 
+            // var size = length;
+                
+            for (var i = 0; i < length; i++) 
             {
                 e2 = data[i];
         
                 if (e == e2) 
                 {
                     // data.move(i+1, i, 1);
-                    data[i] = data[--size]; // overwrite item to remove with last element
-                    data[size] = null; // null last element, so gc can do its work
+                    // data[i] = data[--size]; // overwrite item to remove with last element
+                    // data[size] = null; // null last element, so gc can do its work
+                    data[i] = data[--length]; // overwrite item to remove with last element
+                    data[length] = null; // null last element, so gc can do its work
                     return true;
                 }
             }
-    
             return false;
         }
     

@@ -49,7 +49,7 @@ namespace Artemis
           */
           public A get(Entity e) 
           {
-              return components[e.GetId()];
+              return components[e.Id];
           }
       
           /**
@@ -61,8 +61,8 @@ namespace Artemis
           */
           public A GetSafe(Entity e) 
           {
-              if(components.IsIndexWithinBounds(e.GetId())) {
-                  return components[e.GetId()];
+              if(components.IsIndexWithinBounds(e.Id)) {
+                  return components[e.Id];
               }
               return null;
           }

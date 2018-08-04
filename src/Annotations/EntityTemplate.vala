@@ -35,13 +35,23 @@ namespace Artemis.Annotations
     {
 
         public static Dictionary<string, Type> entityTemplates;
+
+        public static Dictionary<string, Type> Templates
+        {
+            get 
+            {
+                if (entityTemplates == null)
+                    entityTemplates = new Dictionary<string, Type>(); 
+                return entityTemplates;
+            }
+        }
         
         public static void Init()
         {
             entityTemplates = new Dictionary<string, Type>(); 
         }
 
-        public static void Add(string name, Type template)
+        public static void Register(string name, Type template)
         {
             entityTemplates[name] = template;
         }

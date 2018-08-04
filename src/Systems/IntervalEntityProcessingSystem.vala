@@ -40,10 +40,10 @@ namespace Artemis.Systems
 
 
 
-		protected override void ProcessEntities(ImmutableBag<Entity> entities) {
-			for (var i = 0, s = entities.Size(); s > i; i++) {
-				ProcessEach(entities[i]);
-			}
+		protected override void ProcessEntities(ImmutableBag<Entity> entities) 
+		{
+			foreach (var entity in entities)
+				ProcessEach(entity);
 		}
 
 	}

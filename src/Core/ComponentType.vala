@@ -38,7 +38,7 @@ namespace Artemis
             this.type = type;
             if (Pooled.pooledComponents.ContainsKey(type.name()))
             {
-                if (Pooled.pooledComponents[type.name()] == (Object)type) {
+                if (Pooled.pooledComponents[type.name()] == (Type)type) {
                     this.taxonomy = Taxonomy.POOLED;
                 } else {
                     this.taxonomy = Taxonomy.BASIC;

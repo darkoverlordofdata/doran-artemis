@@ -23,6 +23,7 @@ namespace Artemis
 
     public errordomain Exception 
     {
+        InvalidType,
         IllegalArgument,
         ArrayIndexOutOfBounds,
         RangeError,
