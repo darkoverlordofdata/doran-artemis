@@ -29,7 +29,7 @@ namespace Artemis
         public T Obtain<T>(Type componentClass, ComponentType type ) 
         {
             var pool = this.GetPool(type.GetIndex());
-            return ((pool.Size() > 0) ? pool.Obtain<T>() : Object.new(componentClass));
+            return ((pool.Size() > 0) ? pool.Obtain<T>() : GLib.Object.new(componentClass));
         }
     
         public void Free(PooledComponent c, ComponentType type) 

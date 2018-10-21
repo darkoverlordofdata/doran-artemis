@@ -73,7 +73,7 @@ namespace Artemis
     
         public T NewInstance<T>(Type type) 
         {
-            return Object.new(type);
+            return GLib.Object.new(type);
         }
         //  public T newInstance<T>(Type type, bool constructorHasWorldParameter) {
         //      if (constructorHasWorldParameter) {

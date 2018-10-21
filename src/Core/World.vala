@@ -30,7 +30,7 @@ namespace Artemis
      * @author Arni Arent
      * 
      */
-    public class World 
+    public class World : Object
     {
         private EntityManager em;
         private ComponentManager cm;
@@ -91,7 +91,7 @@ namespace Artemis
                 foreach (var entityName in EntityTemplate.entityTemplates.Keys) 
                 {
                     var Template = (Type)EntityTemplate.entityTemplates[entityName];
-                    SetEntityTemplate(entityName, (IEntityTemplate)Object.new(Template));
+                    SetEntityTemplate(entityName, (IEntityTemplate)GLib.Object.new(Template));
                 }
             }
             /** 
@@ -364,7 +364,7 @@ namespace Artemis
         /**
          * Process all non-passive systems.
         */
-        public void Process() 
+        public void Update() 
         {
             Check(_added,   (observer, e) => observer.Added(e));
             Check(_changed, (observer, e) => observer.Changed(e));
@@ -379,7 +379,12 @@ namespace Artemis
                     system.Process();
         }
         
-    
+        public void Draw()
+        {
+            foreach (var system in systemsBag)
+                if(system.IsPassive()) 
+                    system.Process();
+        }
         /**
          * Retrieves a ComponentMapper instance for fast retrieval of components from entities.
         * 

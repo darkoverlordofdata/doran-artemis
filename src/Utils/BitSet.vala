@@ -109,7 +109,8 @@ namespace Artemis.Utils
             }
             if (wordsInUse < wordsRequired) 
             {
-                words.length = int.max(2 * wordsInUse, wordsRequired);
+                words.resize(int.max(2 * wordsInUse, wordsRequired));
+                // words.length = int.max(2 * wordsInUse, wordsRequired);
                 for (var i=wordsInUse, l=words.length; i<l; i++) 
                 {
                     words[i] = 0;

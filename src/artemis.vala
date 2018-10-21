@@ -15,9 +15,8 @@
  ******************************************************************************/
 namespace Artemis 
 {
-    // using Artemis.Annotations;
     using System.Collections.Generic;
-    // public class Ecs : Object
+    
     namespace Annotations
     {
         public static void Register<G>(Dictionary<string?,Type> dict, ...)
@@ -49,19 +48,5 @@ namespace Artemis
             }
             return a;
         } 
-        public static void Registerz<G>(Dictionary<string?,Type> dict, ...)
-        {
-            // var p = va_list();
-            // while (true)
-            // {
-            //     var name = p.arg<string?>();
-            //     if (name == null) break;
-
-            //     var object = p.arg<Type>();
-            //     if (!object.is_a(typeof(G)))
-            //         throw new Artemis.Exception.InvalidType("%s Not Found".printf(typeof(G).name()));
-            //     dict[name] = object;  
-            // }
-        }        
     }
 }

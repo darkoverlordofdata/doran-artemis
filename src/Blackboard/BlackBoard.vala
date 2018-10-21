@@ -36,7 +36,7 @@ namespace Artemis.Blackboard
         {
             intelligence = new Dictionary<string, System.Variant>();
             triggers = new Dictionary<string, ArrayList<Trigger>>();
-            entryLock = new Object();
+            entryLock = this;//new Object();
         }
     
         /**
