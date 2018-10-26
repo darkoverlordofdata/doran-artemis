@@ -16,7 +16,7 @@
 namespace Artemis 
 {
       
-    public interface EntityObserver : Object 
+    public abstract class EntityObserver : Object 
     {
         
         public abstract void Added(Entity e);

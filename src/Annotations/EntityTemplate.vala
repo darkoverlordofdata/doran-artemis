@@ -31,7 +31,7 @@ namespace Artemis.Annotations
      *  Adds class to 
      *       EntityTemplate['entityTemplates'][component] = target;
      */
-    public class EntityTemplate : Object 
+    public abstract class EntityTemplate : Object//, IEntityTemplate
     {
 
         public static Dictionary<string, Type> entityTemplates;
@@ -55,6 +55,8 @@ namespace Artemis.Annotations
         {
             entityTemplates[name] = template;
         }
+
+        public abstract Entity BuildEntity(Entity entity, World world, va_list list);
 
     }
 }

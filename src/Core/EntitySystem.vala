@@ -27,7 +27,7 @@ namespace Artemis
      * @author Arni Arent
      *
      */
-    public abstract class EntitySystem : Object, EntityObserver 
+    public abstract class EntitySystem : EntityObserver 
     {
         public static BlackBoard blackboard;
         private int systemIndex;
@@ -87,7 +87,7 @@ namespace Artemis
         /**
          * Called after the processing of entities ends.
          */
-        protected virtual void End() {}
+        public virtual void End() {}
         
         /**
          * Any implementing entity system must implement this method and the logic
@@ -177,27 +177,27 @@ namespace Artemis
             Inserted(e);
         }
         
-        public void Added(Entity e) {
+        public override void Added(Entity e) {
             Check(e);
         }
         
-        public void Changed(Entity e) {
+        public override void Changed(Entity e) {
             Check(e);
         }
         
-        public void Deleted(Entity e) {
+        public override void Deleted(Entity e) {
             if(e.SystemBits[systemIndex]) {
                 RemoveFromSystem(e);
             }
         }
         
-        public void Disabled(Entity e) {
+        public override void Disabled(Entity e) {
             if(e.SystemBits[systemIndex]) {
                 RemoveFromSystem(e);
             }
         }
 
-        public void Enabled(Entity e) {
+        public override void Enabled(Entity e) {
             Check(e);
         }
     

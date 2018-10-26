@@ -18,7 +18,6 @@
   "source": "src/",
   "files": [
     "src/artemis.vala",
-    "src/exceptions.vala",
     "src/Annotations/EntityTemplate.vala",
     "src/Annotations/Mapper.vala",
     "src/Annotations/Pooled.vala",
@@ -42,7 +41,6 @@
     "src/Core/Entity.vala",
     "src/Core/EntityObserver.vala",
     "src/Core/EntitySystem.vala",
-    "src/Core/IEntityTemplate.vala",
     "src/Core/Exceptions.vala",
     "src/Core/Manager.vala",
     "src/Core/PooledComponent.vala",

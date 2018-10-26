@@ -22,7 +22,7 @@ namespace Artemis
     * @author Arni Arent
     * 
     */
-    public abstract class Manager : Object, EntityObserver 
+    public abstract class Manager : EntityObserver 
     {
         protected World world;
         
@@ -36,15 +36,15 @@ namespace Artemis
             return world;
         }
         
-        public virtual void Added(Entity e) {}
+        public override void Added(Entity e) {}
         
-        public virtual void Changed(Entity e) {}
+        public override void Changed(Entity e) {}
         
-        public virtual void Deleted(Entity e) {}
+        public override void Deleted(Entity e) {}
         
-        public virtual void Disabled(Entity e) {}
+        public override void Disabled(Entity e) {}
         
-        public virtual void Enabled(Entity e) {}
+        public override void Enabled(Entity e) {}
         
     }
 }

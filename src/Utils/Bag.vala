@@ -24,7 +24,7 @@ namespace Artemis.Utils
      *
      * @author Arni Arent
      */
-    public class Bag<E> : Object, ImmutableBag<E> 
+    public class Bag<E> : ImmutableBag<E> 
     {
         /** The backing array. */
         E[] data;
@@ -45,7 +45,7 @@ namespace Artemis.Utils
             data = new E[capacity];
         }
     
-        public BagIterator<E> iterator()
+        public override BagIterator<E> iterator()
         {
             it = new BagIterator<E>(this);
             return it;
@@ -129,7 +129,7 @@ namespace Artemis.Utils
          * @param e
          * @return {boolean}
          */
-        public bool Contains(E e) 
+        public override bool Contains(E e) 
         {
 
             for (var i=0; length > i; i++) 
@@ -187,7 +187,7 @@ namespace Artemis.Utils
          *            index of the element to return
          * @return {Object} the element at the specified position in bag
          */
-        public E? get(int index) 
+        public override E? get(int index) 
         {
             if (index >= data.length) 
             {
@@ -221,7 +221,7 @@ namespace Artemis.Utils
          *
          * @return {number} the number of elements in this bag
          */
-        public int Size() 
+        public override int Size() 
         {
             return length;
         }
@@ -252,7 +252,7 @@ namespace Artemis.Utils
          *
          * @return {boolean} true if this list contains no elements
          */
-        public bool IsEmpty() 
+        public override bool IsEmpty() 
         {
             return length == 0;
         }

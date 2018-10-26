@@ -48,7 +48,7 @@ namespace Artemis
         private Dictionary<Type, EntitySystem> systems;
         private Bag<EntitySystem> systemsBag;
 
-        private Dictionary<string, IEntityTemplate> entityTemplates;
+        private Dictionary<string, EntityTemplate> entityTemplates;
 
         public World() 
         {
@@ -85,13 +85,13 @@ namespace Artemis
              * 
              * Collect the entity templates
              */
-            entityTemplates = new Dictionary<string, IEntityTemplate>();
+            entityTemplates = new Dictionary<string, EntityTemplate>();
             if (EntityTemplate.entityTemplates.Keys != null)
             {
                 foreach (var entityName in EntityTemplate.entityTemplates.Keys) 
                 {
                     var Template = (Type)EntityTemplate.entityTemplates[entityName];
-                    SetEntityTemplate(entityName, (IEntityTemplate)GLib.Object.new(Template));
+                    SetEntityTemplate(entityName, (EntityTemplate)GLib.Object.new(Template));
                 }
             }
             /** 
@@ -381,9 +381,11 @@ namespace Artemis
         
         public void Draw()
         {
-            foreach (var system in systemsBag)
-                if(system.IsPassive()) 
+            foreach (var system in systemsBag){
+                if(system.IsPassive()) {
                     system.Process();
+                }
+            }
         }
         /**
          * Retrieves a ComponentMapper instance for fast retrieval of components from entities.
@@ -404,7 +406,7 @@ namespace Artemis
          * @param entityTag
          * @param entityTemplate
          */
-        public void SetEntityTemplate(string entityTag, IEntityTemplate entityTemplate) 
+        public void SetEntityTemplate(string entityTag, EntityTemplate entityTemplate) 
         {
             entityTemplates[entityTag] = entityTemplate;
         }
